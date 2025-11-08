@@ -10,7 +10,7 @@ export default function Home() {
       {/* Subtle LiquidEther Background */}
       <div className="fixed inset-0 z-0 opacity-20">
         <LiquidEther
-          colors={['#E8F4F8', '#F0F9FF', '#E0F2FE', '#DCFCE7']}
+          colors={['#E8F4F8', '#e3f4ff', '#b412ff', '#eec9ff']}
           resolution={0.5}
           mouseForce={15}
           cursorSize={100}
@@ -47,8 +47,8 @@ export default function Home() {
               <Image
                 src="/Logo.png"
                 alt="Lunari Logo"
-                width={100}
-                height={100}
+                width={200}
+                height={200}
                 className="mx-auto rounded-2xl"
                 priority
               />
