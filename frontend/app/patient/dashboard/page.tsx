@@ -642,7 +642,8 @@ export default function PatientDashboard() {
       <ChatBox />
       {/* 3D Avatar - Bottom Right */}
       <div className="fixed bottom-4 right-10 rounded-full bg-gray-200 w-36 h-36 shadow-2xl shadow-black/40 overflow-hidden">
-        <Avatar3D container={true} />
+        {/* <Avatar3D container={true} /> */}
+        <img src="/Avatar.png" alt="Avatar" className="w-full h-full translate-y-2 translate-x-0.5 object-cover" />
       </div>
     </div>
   );

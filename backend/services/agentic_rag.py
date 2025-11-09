@@ -70,7 +70,7 @@ def create_llm(use_groq: bool = True, groq_api_key: Optional[str] = None, model_
     """
     if use_groq and GROQ_AVAILABLE:
         # Hardcoded API key as fallback (for development)
-        HARDCODED_API_KEY = "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"
+        HARDCODED_API_KEY = "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"
         api_key = groq_api_key or os.getenv("GROQ_API_KEY") or HARDCODED_API_KEY
         
         if not api_key:
