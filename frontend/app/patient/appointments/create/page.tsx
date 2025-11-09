@@ -611,9 +611,9 @@ export default function CreateAppointmentPage() {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9]">
+    <div className="min-h-screen bg-[#F5F9F7]">
       {/* Navigation */}
-      <nav className="w-full px-8 py-6 border-b border-[#E2E8F0] bg-white">
+      <nav className="w-full px-8 py-6 border-b border-[#D4E4DD] bg-white">
         <div className="container mx-auto max-w-7xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/patient/dashboard">
@@ -625,14 +625,14 @@ export default function CreateAppointmentPage() {
                 className="rounded-lg"
               />
             </Link>
-            <Link href="/patient/dashboard" className="text-xl font-semibold text-[#1E293B] font-poppins hover:text-[#0F172A] transition-colors">
+            <Link href="/patient/dashboard" className="text-xl font-semibold text-[#2D3748] font-poppins hover:text-[#2D3748] transition-colors">
               Sana
             </Link>
           </div>
           <div className="flex items-center gap-4">
             <Link
               href="/patient/dashboard"
-              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#0F172A] transition-colors font-inter"
+              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#2D3748] transition-colors font-inter"
             >
               Dashboard
             </Link>
@@ -643,7 +643,7 @@ export default function CreateAppointmentPage() {
       {/* Main Content */}
       <main className="container mx-auto max-w-3xl px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-light text-[#0F172A] mb-2 font-poppins">
+          <h1 className="text-4xl font-light text-[#2D3748] mb-2 font-poppins">
             Schedule Appointment
           </h1>
           <p className="text-lg text-[#64748B] font-inter">
@@ -659,14 +659,14 @@ export default function CreateAppointmentPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Date & Time Section */}
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
-            <h2 className="text-xl font-semibold text-[#0F172A] mb-6 font-poppins flex items-center gap-2">
-              <IoCalendarOutline className="text-[#0F172A]" />
+          <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
+            <h2 className="text-xl font-semibold text-[#2D3748] mb-6 font-poppins flex items-center gap-2">
+              <IoCalendarOutline className="text-[#4A7C7E]" />
               Date & Time
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="appointmentDate" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                <label htmlFor="appointmentDate" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                   Appointment Date <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -675,12 +675,12 @@ export default function CreateAppointmentPage() {
                   value={appointmentDate}
                   onChange={(e) => setAppointmentDate(e.target.value)}
                   min={today}
-                  className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                  className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="appointmentTime" className="flex items-center gap-2 text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                <label htmlFor="appointmentTime" className="flex items-center gap-2 text-sm font-medium text-[#2D3748] mb-2 font-inter">
                   <IoTimeOutline />
                   Appointment Time <span className="text-red-500">*</span>
                 </label>
@@ -689,7 +689,7 @@ export default function CreateAppointmentPage() {
                   type="time"
                   value={appointmentTime}
                   onChange={(e) => setAppointmentTime(e.target.value)}
-                  className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                  className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                   required
                 />
               </div>
@@ -697,13 +697,13 @@ export default function CreateAppointmentPage() {
           </div>
 
           {/* Location Section */}
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
-            <h2 className="text-xl font-semibold text-[#0F172A] mb-6 font-poppins flex items-center gap-2">
-              <IoLocationOutline className="text-[#0F172A]" />
+          <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
+            <h2 className="text-xl font-semibold text-[#2D3748] mb-6 font-poppins flex items-center gap-2">
+              <IoLocationOutline className="text-[#4A7C7E]" />
               Location
             </h2>
             <div className="relative">
-              <label htmlFor="location" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="location" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Appointment Location
               </label>
               <input
@@ -717,7 +717,7 @@ export default function CreateAppointmentPage() {
                     setShowSuggestions(true);
                   }
                 }}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="Start typing an address..."
                 autoComplete="off"
               />
@@ -726,7 +726,7 @@ export default function CreateAppointmentPage() {
               {showSuggestions && (locationSuggestions.length > 0 || isLoadingSuggestions) && (
                 <div
                   ref={suggestionsRef}
-                  className="absolute z-50 w-full mt-1 bg-white border border-[#E2E8F0] rounded-xl shadow-lg max-h-60 overflow-y-auto"
+                  className="absolute z-50 w-full mt-1 bg-white border border-[#D4E4DD] rounded-xl shadow-lg max-h-60 overflow-y-auto"
                 >
                   {isLoadingSuggestions ? (
                     <div className="p-4 text-center text-sm text-[#64748B] font-inter">
@@ -738,9 +738,9 @@ export default function CreateAppointmentPage() {
                         key={suggestion.place_id}
                         type="button"
                         onClick={() => handleSelectSuggestion(suggestion)}
-                        className="w-full text-left px-4 py-3 hover:bg-[#F8FAFC] transition-colors border-b border-[#E2E8F0] last:border-b-0 font-inter"
+                        className="w-full text-left px-4 py-3 hover:bg-[#F5F9F7] transition-colors border-b border-[#D4E4DD] last:border-b-0 font-inter"
                       >
-                        <div className="text-sm text-[#0F172A] font-medium">
+                        <div className="text-sm text-[#2D3748] font-medium">
                           {suggestion.display_name}
                         </div>
                       </button>
@@ -752,15 +752,15 @@ export default function CreateAppointmentPage() {
           </div>
 
           {/* Reason for Visit Section */}
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
-            <h2 className="text-xl font-semibold text-[#0F172A] font-poppins flex items-center gap-2 mb-6">
-              <HiOutlineDocumentText className="text-[#0F172A]" />
+          <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
+            <h2 className="text-xl font-semibold text-[#2D3748] font-poppins flex items-center gap-2 mb-6">
+              <HiOutlineDocumentText className="text-[#4A7C7E]" />
               Reason for Visit <span className="text-red-500">*</span>
             </h2>
             
             {/* Primary: Voice Input */}
             <div className="mb-6">
-              <div className="flex flex-col items-center justify-center py-8 px-6 bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9] rounded-xl border-2 border-dashed border-[#CBD5E1]">
+              <div className="flex flex-col items-center justify-center py-8 px-6 bg-gradient-to-br from-[#F5F9F7] to-[#E8F3F0] rounded-xl border-2 border-dashed border-[#D4E4DD]">
                 {!isRecording && !voiceTranscript && !reason && (
                   <>
                     <button
@@ -798,8 +798,8 @@ export default function CreateAppointmentPage() {
                       
                       {/* Live transcript display */}
                       <div className="mt-3 pt-3 border-t border-red-200">
-                        <p className="text-xs font-semibold text-[#0F172A] mb-2 font-inter">Live Transcription:</p>
-                        <div className="text-sm text-[#0F172A] font-inter bg-white p-3 rounded-lg min-h-[60px]">
+                        <p className="text-xs font-semibold text-[#2D3748] mb-2 font-inter">Live Transcription:</p>
+                        <div className="text-sm text-[#2D3748] font-inter bg-white p-3 rounded-lg min-h-[60px]">
                           {liveTranscript || <span className="text-[#64748B] italic">Listening... speak now</span>}
                         </div>
                         <p className="text-xs text-[#64748B] mt-2 font-inter italic">
@@ -814,7 +814,7 @@ export default function CreateAppointmentPage() {
                   <div className="w-full p-4 bg-blue-50 border border-blue-200 rounded-xl">
                     <div className="flex items-center gap-3">
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                      <p className="text-sm text-[#0F172A] font-inter">
+                      <p className="text-sm text-[#2D3748] font-inter">
                         Processing audio and generating SOAP notes...
                       </p>
                     </div>
@@ -825,7 +825,7 @@ export default function CreateAppointmentPage() {
                   <div className="w-full">
                     <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                       <div className="flex items-start justify-between mb-2">
-                        <p className="text-sm font-medium text-[#0F172A] font-inter">Voice Transcript:</p>
+                        <p className="text-sm font-medium text-[#2D3748] font-inter">Voice Transcript:</p>
                         <button
                           type="button"
                           onClick={handleUseVoiceTranscript}
@@ -839,7 +839,7 @@ export default function CreateAppointmentPage() {
                       {/* Show SOAP notes preview */}
                       {soapNotes && (
                         <div className="mt-3 pt-3 border-t border-blue-200">
-                          <p className="text-xs font-semibold text-[#0F172A] mb-2 font-inter">SOAP Notes Generated:</p>
+                          <p className="text-xs font-semibold text-[#2D3748] mb-2 font-inter">SOAP Notes Generated:</p>
                           <div className="text-xs text-[#64748B] font-inter bg-white p-3 rounded-lg max-h-32 overflow-y-auto">
                             <pre className="whitespace-pre-wrap font-sans">{soapNotes}</pre>
                           </div>
@@ -852,7 +852,7 @@ export default function CreateAppointmentPage() {
                     <button
                       type="button"
                       onClick={handleStartRecording}
-                      className="w-full px-4 py-2 text-sm text-[#64748B] hover:text-[#0F172A] font-inter border border-[#E2E8F0] rounded-lg hover:border-[#CBD5E1] transition-colors"
+                      className="w-full px-4 py-2 text-sm text-[#64748B] hover:text-[#2D3748] font-inter border border-[#D4E4DD] rounded-lg hover:border-[#B8D4CC] transition-colors"
                     >
                       Record Again
                     </button>
@@ -862,7 +862,7 @@ export default function CreateAppointmentPage() {
             </div>
 
             {/* Secondary: Text Input */}
-            <div className="border-t border-[#E2E8F0] pt-6">
+            <div className="border-t border-[#D4E4DD] pt-6">
               <div className="flex items-center justify-between mb-3">
                 <label htmlFor="reason" className="text-sm font-medium text-[#64748B] font-inter">
                   Or type manually
@@ -875,7 +875,7 @@ export default function CreateAppointmentPage() {
                 id="reason"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="Type your symptoms or reason for the appointment..."
                 rows={3}
                 required
@@ -884,19 +884,19 @@ export default function CreateAppointmentPage() {
           </div>
 
           {/* Additional Notes Section */}
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
-            <h2 className="text-xl font-semibold text-[#0F172A] mb-6 font-poppins">
+          <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
+            <h2 className="text-xl font-semibold text-[#2D3748] mb-6 font-poppins">
               Additional Notes
             </h2>
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="notes" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Additional Information
               </label>
               <textarea
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="Any additional information that might be helpful..."
                 rows={4}
               />
@@ -907,11 +907,11 @@ export default function CreateAppointmentPage() {
           </div>
 
           {/* Medical History Section */}
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
+          <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-xl font-semibold text-[#0F172A] font-poppins flex items-center gap-2">
-                  <HiOutlineDocumentText className="text-[#0F172A]" />
+                <h2 className="text-xl font-semibold text-[#2D3748] font-poppins flex items-center gap-2">
+                  <HiOutlineDocumentText className="text-[#4A7C7E]" />
                   Medical History
                 </h2>
                 <p className="text-sm text-[#64748B] font-inter mt-1">
@@ -941,13 +941,13 @@ export default function CreateAppointmentPage() {
               </div>
             ) : (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <p className="text-sm text-[#0F172A] font-inter mb-3">
+                <p className="text-sm text-[#2D3748] font-inter mb-3">
                   Fill out your medical history once to speed up future appointments. Your information will be automatically included.
                 </p>
                 <button
                   type="button"
                   onClick={handleOpenHistoryModal}
-                  className="px-4 py-2 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors font-inter text-sm"
+                  className="px-4 py-2 bg-[#4A7C7E] text-white rounded-lg font-medium hover:bg-[#3A6C6E] transition-colors font-inter text-sm"
                 >
                   Add Medical History
                 </button>
@@ -960,14 +960,14 @@ export default function CreateAppointmentPage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-6 py-3 bg-[#0F172A] text-white rounded-xl font-medium hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3 bg-[#4A7C7E] text-white rounded-xl font-medium hover:bg-[#3A6C6E] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {saving && <ButtonLoadingSpinner />}
               {saving ? 'Scheduling...' : 'Schedule Appointment'}
             </button>
             <Link
               href="/patient/dashboard"
-              className="px-6 py-3 bg-white text-[#0F172A] rounded-xl font-medium border-2 border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC] transition-all font-inter"
+              className="px-6 py-3 bg-white text-[#2D3748] rounded-xl font-medium border-2 border-[#D4E4DD] hover:border-[#B8D4CC] hover:bg-[#F5F9F7] transition-all font-inter"
             >
               Cancel
             </Link>
@@ -978,14 +978,14 @@ export default function CreateAppointmentPage() {
         {showHistoryModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-[#E2E8F0] sticky top-0 bg-white">
+              <div className="p-6 border-b border-[#D4E4DD] sticky top-0 bg-white">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-semibold text-[#0F172A] font-poppins">
+                  <h2 className="text-2xl font-semibold text-[#2D3748] font-poppins">
                     {medicalHistory ? 'Update Medical History' : 'Add Medical History'}
                   </h2>
                   <button
                     onClick={handleCloseHistoryModal}
-                    className="text-[#64748B] hover:text-[#0F172A] transition-colors text-2xl"
+                    className="text-[#64748B] hover:text-[#2D3748] transition-colors text-2xl"
                   >
                     ×
                   </button>
@@ -1001,19 +1001,19 @@ export default function CreateAppointmentPage() {
 
                 {/* Basic Health Info Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Basic Health Information
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="modal-bloodType" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-bloodType" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Blood Type
                       </label>
                       <select
                         id="modal-bloodType"
                         value={bloodType}
                         onChange={(e) => setBloodType(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="A+">A+</option>
@@ -1028,7 +1028,7 @@ export default function CreateAppointmentPage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="modal-heightInches" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-heightInches" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Height (inches)
                       </label>
                       <input
@@ -1038,12 +1038,12 @@ export default function CreateAppointmentPage() {
                         max="120"
                         value={heightInches}
                         onChange={(e) => setHeightInches(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="70"
                       />
                     </div>
                     <div>
-                      <label htmlFor="modal-weightLbs" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-weightLbs" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Weight (lbs)
                       </label>
                       <input
@@ -1053,7 +1053,7 @@ export default function CreateAppointmentPage() {
                         max="1000"
                         value={weightLbs}
                         onChange={(e) => setWeightLbs(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="150"
                       />
                     </div>
@@ -1062,31 +1062,31 @@ export default function CreateAppointmentPage() {
 
                 {/* Allergies & Medications Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Allergies & Medications
                   </h3>
                   <div>
-                    <label htmlFor="modal-allergies" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-allergies" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Allergies
                     </label>
                     <textarea
                       id="modal-allergies"
                       value={allergies}
                       onChange={(e) => setAllergies(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List any allergies (e.g., Penicillin, Peanuts, Latex)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="modal-medications" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-medications" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Current Medications
                     </label>
                     <textarea
                       id="modal-medications"
                       value={medications}
                       onChange={(e) => setMedications(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List current medications, dosages, and frequency (e.g., Metformin 500mg twice daily)"
                       rows={4}
                     />
@@ -1095,44 +1095,44 @@ export default function CreateAppointmentPage() {
 
                 {/* Medical History Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Medical History
                   </h3>
                   <div>
-                    <label htmlFor="modal-conditions" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-conditions" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Chronic Conditions
                     </label>
                     <textarea
                       id="modal-conditions"
                       value={conditions}
                       onChange={(e) => setConditions(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List chronic conditions (e.g., Diabetes Type 2, Hypertension, Asthma)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="modal-surgeries" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-surgeries" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Past Surgeries
                     </label>
                     <textarea
                       id="modal-surgeries"
                       value={surgeries}
                       onChange={(e) => setSurgeries(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List past surgeries and dates (e.g., Appendectomy - 2015)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="modal-hospitalizations" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-hospitalizations" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Previous Hospitalizations
                     </label>
                     <textarea
                       id="modal-hospitalizations"
                       value={hospitalizations}
                       onChange={(e) => setHospitalizations(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List previous hospitalizations, dates, and reasons"
                       rows={3}
                     />
@@ -1141,19 +1141,19 @@ export default function CreateAppointmentPage() {
 
                 {/* Lifestyle Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Lifestyle
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="modal-smokingStatus" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-smokingStatus" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Smoking Status
                       </label>
                       <select
                         id="modal-smokingStatus"
                         value={smokingStatus}
                         onChange={(e) => setSmokingStatus(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="never">Never</option>
@@ -1162,14 +1162,14 @@ export default function CreateAppointmentPage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="modal-alcoholUse" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-alcoholUse" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Alcohol Use
                       </label>
                       <select
                         id="modal-alcoholUse"
                         value={alcoholUse}
                         onChange={(e) => setAlcoholUse(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="none">None</option>
@@ -1178,14 +1178,14 @@ export default function CreateAppointmentPage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="modal-exerciseFrequency" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-exerciseFrequency" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Exercise Frequency
                       </label>
                       <select
                         id="modal-exerciseFrequency"
                         value={exerciseFrequency}
                         onChange={(e) => setExerciseFrequency(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="none">None</option>
@@ -1198,31 +1198,31 @@ export default function CreateAppointmentPage() {
 
                 {/* Family & Mental Health Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Family & Mental Health
                   </h3>
                   <div>
-                    <label htmlFor="modal-familyHistory" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-familyHistory" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Family History
                     </label>
                     <textarea
                       id="modal-familyHistory"
                       value={familyHistory}
                       onChange={(e) => setFamilyHistory(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Relevant family medical history (e.g., Father: Heart disease, Mother: Diabetes)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="modal-mentalHealth" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-mentalHealth" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Mental Health History
                     </label>
                     <textarea
                       id="modal-mentalHealth"
                       value={mentalHealth}
                       onChange={(e) => setMentalHealth(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Mental health conditions, treatments, or relevant history"
                       rows={3}
                     />
@@ -1231,18 +1231,18 @@ export default function CreateAppointmentPage() {
 
                 {/* Immunizations Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Immunizations
                   </h3>
                   <div>
-                    <label htmlFor="modal-immunizations" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-immunizations" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Immunization History
                     </label>
                     <textarea
                       id="modal-immunizations"
                       value={immunizations}
                       onChange={(e) => setImmunizations(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List immunizations and dates (e.g., COVID-19 vaccine - 2021, Flu shot - 2024)"
                       rows={3}
                     />
@@ -1251,12 +1251,12 @@ export default function CreateAppointmentPage() {
 
                 {/* Emergency Contact Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Emergency Contact
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="modal-emergencyName" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-emergencyName" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Contact Name
                       </label>
                       <input
@@ -1264,12 +1264,12 @@ export default function CreateAppointmentPage() {
                         type="text"
                         value={emergencyName}
                         onChange={(e) => setEmergencyName(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="John Doe"
                       />
                     </div>
                     <div>
-                      <label htmlFor="modal-emergencyPhone" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-emergencyPhone" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Contact Phone
                       </label>
                       <input
@@ -1277,13 +1277,13 @@ export default function CreateAppointmentPage() {
                         type="tel"
                         value={emergencyPhone}
                         onChange={(e) => setEmergencyPhone(formatPhoneNumber(e.target.value))}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="(555) 123-4567"
                         maxLength={14}
                       />
                     </div>
                     <div>
-                      <label htmlFor="modal-emergencyRelation" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-emergencyRelation" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Relationship
                       </label>
                       <input
@@ -1291,7 +1291,7 @@ export default function CreateAppointmentPage() {
                         type="text"
                         value={emergencyRelation}
                         onChange={(e) => setEmergencyRelation(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="Spouse, Parent, etc."
                       />
                     </div>
@@ -1300,12 +1300,12 @@ export default function CreateAppointmentPage() {
 
                 {/* Insurance Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Insurance Information
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="modal-insuranceProvider" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-insuranceProvider" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Insurance Provider
                       </label>
                       <input
@@ -1313,12 +1313,12 @@ export default function CreateAppointmentPage() {
                         type="text"
                         value={insuranceProvider}
                         onChange={(e) => setInsuranceProvider(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="Blue Cross Blue Shield"
                       />
                     </div>
                     <div>
-                      <label htmlFor="modal-insurancePolicy" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="modal-insurancePolicy" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Policy Number
                       </label>
                       <input
@@ -1326,7 +1326,7 @@ export default function CreateAppointmentPage() {
                         type="text"
                         value={insurancePolicy}
                         onChange={(e) => setInsurancePolicy(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="ABC123456789"
                       />
                     </div>
@@ -1335,29 +1335,29 @@ export default function CreateAppointmentPage() {
 
                 {/* Other Notes Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Additional Information
                   </h3>
                   <div>
-                    <label htmlFor="modal-otherNotes" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="modal-otherNotes" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Other Notes
                     </label>
                     <textarea
                       id="modal-otherNotes"
                       value={otherNotes}
                       onChange={(e) => setOtherNotes(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Any other relevant medical information"
                       rows={3}
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-[#E2E8F0]">
+                <div className="flex gap-4 pt-4 border-t border-[#D4E4DD]">
                   <button
                     type="submit"
                     disabled={savingHistory}
-                    className="px-6 py-3 bg-[#0F172A] text-white rounded-xl font-medium hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="px-6 py-3 bg-[#4A7C7E] text-white rounded-xl font-medium hover:bg-[#3A6C6E] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {savingHistory && <ButtonLoadingSpinner />}
                     {savingHistory ? 'Saving...' : 'Save Medical History'}
@@ -1365,7 +1365,7 @@ export default function CreateAppointmentPage() {
                   <button
                     type="button"
                     onClick={handleCloseHistoryModal}
-                    className="px-6 py-3 bg-white text-[#0F172A] rounded-xl font-medium border-2 border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC] transition-all font-inter"
+                    className="px-6 py-3 bg-white text-[#2D3748] rounded-xl font-medium border-2 border-[#D4E4DD] hover:border-[#B8D4CC] hover:bg-[#F5F9F7] transition-all font-inter"
                   >
                     Cancel
                   </button>
