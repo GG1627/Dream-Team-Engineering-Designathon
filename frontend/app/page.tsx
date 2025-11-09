@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import LiquidEther from "./components/LiquidEther";
-import Avatar3D from "./components/Avatar3D";
 
 export default function Home() {
   return (
@@ -90,9 +89,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-
-      {/* 3D Avatar - Bottom Right */}
-      <Avatar3D />
     </div>
   );
 }

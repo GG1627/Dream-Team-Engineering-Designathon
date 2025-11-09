@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routes import reasoning, pipeline
+from backend.routes import reasoning, pipeline, rag
 
 
 app = FastAPI(
@@ -21,6 +21,7 @@ app.add_middleware(
 # Include routers
 app.include_router(reasoning.router)
 app.include_router(pipeline.router)
+app.include_router(rag.router)
 
 @app.get("/")
 def read_root():
@@ -35,6 +36,13 @@ def read_root():
                 "audio_to_soap": "/pipeline/audio-to-soap",
                 "transcript_to_soap": "/pipeline/transcript-to-soap",
                 "health": "/pipeline/health"
+            },
+            "rag": {
+                "query": "/rag/query",
+                "add_documents": "/rag/add-documents",
+                "rebuild_from_pdfs": "/rag/rebuild-from-pdfs",
+                "clear": "/rag/clear",
+                "health": "/rag/health"
             }
         }
     }

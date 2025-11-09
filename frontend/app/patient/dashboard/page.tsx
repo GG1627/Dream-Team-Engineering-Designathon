@@ -10,6 +10,8 @@ import { FullPageLoading } from '@/app/components/LoadingSpinner';
 import { IoCalendarOutline, IoAddCircleOutline, IoLocationOutline } from "react-icons/io5";
 import { BsClock, BsCalendarCheck } from "react-icons/bs";
 import { HiOutlineDocumentText, HiOutlineChartBar } from "react-icons/hi2";
+import Avatar3D from '@/app/components/Avatar3D';
+import ChatBox from '@/app/components/ChatBox';
 
 
 export default function PatientDashboard() {
@@ -287,6 +289,12 @@ export default function PatientDashboard() {
           */}
         </div>
       </main>
+      {/* Chat Box - Above Avatar */}
+      <ChatBox />
+      {/* 3D Avatar - Bottom Right */}
+      <div className="fixed bottom-4 right-10 rounded-full bg-gray-200 w-36 h-36 shadow-2xl shadow-black/40 overflow-hidden">
+        <Avatar3D container={true} />
+      </div>
     </div>
   );
 }
