@@ -6,11 +6,11 @@ import LiquidEther from "./components/LiquidEther";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#FAFAF9]">
+    <div className="relative min-h-screen overflow-hidden bg-[#F5F9F7]">
       {/* Subtle LiquidEther Background */}
-      <div className="fixed inset-0 z-0 opacity-20">
+      <div className="fixed inset-0 z-0 opacity-15">
         <LiquidEther
-          colors={['#E8F4F8', '#e3f4ff', '#b412ff', '#eec9ff']}
+          colors={['#E8F3F0', '#D4E4DD', '#B8D4CC', '#E0EAE5']}
           resolution={0.5}
           mouseForce={15}
           cursorSize={100}
@@ -29,12 +29,12 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <Image
                 src="/Logo.png"
-                alt="Lunari Logo"
+                alt="Sana Logo"
                 width={36}
                 height={36}
                 className="rounded-lg"
               />
-              <span className="text-xl font-semibold text-[#1E293B] font-poppins">Lunari</span>
+              <span className="text-xl font-semibold text-[#2D3748] font-poppins">Sana</span>
             </div>
           </div>
         </nav>
@@ -46,7 +46,7 @@ export default function Home() {
             <div className="mb-8 inline-block">
               <Image
                 src="/Logo.png"
-                alt="Lunari Logo"
+                alt="Sana Logo"
                 width={200}
                 height={200}
                 className="mx-auto rounded-2xl"
@@ -55,12 +55,12 @@ export default function Home() {
             </div>
 
             {/* Title */}
-            <h1 className="text-5xl md:text-7xl font-light text-[#0F172A] mb-4 tracking-tight font-poppins">
-              Lunari
+            <h1 className="text-5xl md:text-7xl font-light text-[#2D3748] mb-4 tracking-tight font-poppins">
+              Sana
             </h1>
 
             {/* Tagline */}
-            <p className="text-xl md:text-2xl text-[#475569] mb-16 font-light max-w-2xl mx-auto font-inter">
+            <p className="text-xl md:text-2xl text-[#64748B] mb-16 font-light max-w-2xl mx-auto font-inter">
               AI-Powered Medical Intake Assistant
             </p>
 
@@ -68,13 +68,13 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-md mx-auto">
               <Link
                 href="/patient/login"
-                className="w-full sm:w-auto px-12 py-4 bg-[#0F172A] text-white rounded-xl font-medium text-lg hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter"
+                className="w-full sm:w-auto px-12 py-4 bg-[#6B9080] text-white rounded-xl font-medium text-lg hover:bg-[#5A7A6D] transition-all shadow-sm hover:shadow-md font-inter"
               >
                 Patient Login
               </Link>
               <Link
                 href="/doctor/login"
-                className="w-full sm:w-auto px-12 py-4 bg-white text-[#0F172A] rounded-xl font-medium text-lg border-2 border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC] transition-all shadow-sm hover:shadow-lg font-inter"
+                className="w-full sm:w-auto px-12 py-4 bg-[#FAF7F2] text-[#2D3748] rounded-xl font-medium text-lg border-2 border-[#D4E4DD] hover:border-[#B8D4CC] hover:bg-[#F5F3ED] transition-all shadow-sm hover:shadow-md font-inter"
               >
                 Doctor Login
               </Link>
@@ -83,9 +83,9 @@ export default function Home() {
         </main>
 
         {/* Simple Footer */}
-        <footer className="w-full px-8 py-6 border-t border-[#E2E8F0]">
-          <div className="container mx-auto max-w-6xl text-center text-sm text-[#64748B] font-inter">
-            © 2025 Lunari. Powered by AI for better healthcare.
+        <footer className="w-full px-8 py-6 border-t border-[#D4E4DD]">
+          <div className="container mx-auto max-w-6xl text-center text-sm text-[#6B7C87] font-inter">
+            © 2025 Sana. Powered by AI for better healthcare.
           </div>
         </footer>
       </div>

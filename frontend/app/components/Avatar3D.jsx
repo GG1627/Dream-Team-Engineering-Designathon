@@ -13,13 +13,13 @@ export default function Avatar3D({ container = false }) {
     <div className={containerClasses}>
       <div className="w-full h-full pointer-events-auto">
         <Canvas
-          camera={{ position: [0, 0.6, 5], fov: 50 }}
+          camera={{ position: [0, 0.3, 5], fov: 50 }}
           gl={{ antialias: true, alpha: true }}
         >
           <ambientLight intensity={0.5} />
           <directionalLight position={[5, 5, 5]} intensity={0.5} />
           <pointLight position={[-5, -5, -5]} intensity={0.1} />
-          <Avatar position={[0, -12.4, 0]} scale={[7.8, 7.8, 7.8]} />
+          <Avatar position={[0, -15.8, 0]} scale={[9.8, 9.8, 9.8]} />
           <OrbitControls
             enableZoom={false}
             enablePan={false}

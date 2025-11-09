@@ -62,6 +62,18 @@ export interface Appointment {
   updated_at?: string
 }
 
+export interface Medication {
+  id?: string
+  patient_id?: string
+  name: string
+  dosage: string
+  total_amount: number
+  start_date: string // Date when medication starts (YYYY-MM-DD format)
+  created_at?: string
+  updated_at?: string
+  created_by?: string | null
+}
+
 /**
  * Get patient data from patients table by email
  */
@@ -215,6 +227,118 @@ export async function getAppointments(patientId: string) {
     return { data: data as Appointment[], error: null }
   } catch (error: any) {
     return { data: null, error }
+  }
+}
+
+/**
+ * Get medications for a patient by patient_id
+ */
+export async function getMedicationsByPatientId(patientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('medications')
+      .select('*')
+      .eq('patient_id', patientId)
+      .order('created_at', { ascending: false })
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Medication[], error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get medications for a patient by email
+ */
+export async function getMedicationsByEmail(email: string) {
+  try {
+    // First get patient_id
+    const { data: patientData, error: patientError } = await supabase
+      .from('patients')
+      .select('id')
+      .eq('email', email)
+      .single()
+    
+    if (patientError || !patientData) {
+      return { data: null, error: patientError || new Error('Patient not found') }
+    }
+    
+    return await getMedicationsByPatientId(patientData.id)
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Add a new medication
+ */
+export async function addMedication(patientId: string, medication: { name: string; dosage: string; total_amount: number; start_date: string }) {
+  try {
+    const { data, error } = await supabase
+      .from('medications')
+      .insert({
+        patient_id: patientId,
+        name: medication.name,
+        dosage: medication.dosage,
+        total_amount: medication.total_amount,
+        start_date: medication.start_date
+      })
+      .select()
+      .single()
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Medication, error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Add a medication by patient email
+ */
+export async function addMedicationByEmail(email: string, medication: { name: string; dosage: string; total_amount: number; start_date: string }) {
+  try {
+    // First get patient_id
+    const { data: patientData, error: patientError } = await supabase
+      .from('patients')
+      .select('id')
+      .eq('email', email)
+      .single()
+    
+    if (patientError || !patientData) {
+      return { data: null, error: patientError || new Error('Patient not found') }
+    }
+    
+    return await addMedication(patientData.id, medication)
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Delete a medication
+ */
+export async function deleteMedication(medicationId: string) {
+  try {
+    const { error } = await supabase
+      .from('medications')
+      .delete()
+      .eq('id', medicationId)
+    
+    if (error) {
+      return { error }
+    }
+    
+    return { error: null }
+  } catch (error: any) {
+    return { error }
   }
 }
 

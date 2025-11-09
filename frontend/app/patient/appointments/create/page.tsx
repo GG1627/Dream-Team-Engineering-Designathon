@@ -126,7 +126,7 @@ export default function CreateAppointmentPage() {
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&addressdetails=1&countrycodes=us`,
         {
           headers: {
-            'User-Agent': 'Lunari Medical App', // Required by Nominatim
+            'User-Agent': 'Sana Medical App', // Required by Nominatim
           },
         }
       );
@@ -619,14 +619,14 @@ export default function CreateAppointmentPage() {
             <Link href="/patient/dashboard">
               <Image
                 src="/Logo.png"
-                alt="Lunari Logo"
+                alt="Sana Logo"
                 width={36}
                 height={36}
                 className="rounded-lg"
               />
             </Link>
             <Link href="/patient/dashboard" className="text-xl font-semibold text-[#1E293B] font-poppins hover:text-[#0F172A] transition-colors">
-              Lunari
+              Sana
             </Link>
           </div>
           <div className="flex items-center gap-4">

@@ -16,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Lunari - AI-Powered Medical Intake Assistant",
+  title: "Sana - AI-Powered Medical Intake Assistant",
   description: "Transform patient intake with conversational AI. Record, transcribe, analyze emotions, and generate SOAP notes automatically—reducing documentation time by over 40%.",
 };
 

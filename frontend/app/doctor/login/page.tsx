@@ -38,14 +38,14 @@ export default function DoctorLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FAFAF9] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F9F7] px-6">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Link href="/">
             <Image
               src="/Logo.png"
-              alt="Lunari Logo"
+              alt="Sana Logo"
               width={60}
               height={60}
               className="rounded-lg"
@@ -53,7 +53,7 @@ export default function DoctorLoginPage() {
           </Link>
         </div>
 
-        <h1 className="text-3xl font-semibold text-[#0F172A] mb-2 text-center font-poppins">
+        <h1 className="text-3xl font-semibold text-[#2D3748] mb-2 text-center font-poppins">
           Doctor Login
         </h1>
         <p className="text-sm text-[#64748B] mb-8 text-center font-inter">
@@ -68,7 +68,7 @@ export default function DoctorLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+            <label htmlFor="email" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -76,7 +76,7 @@ export default function DoctorLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+              className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent bg-white font-inter"
               placeholder="doctor@example.com"
               required
             />
@@ -85,7 +85,7 @@ export default function DoctorLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-6 py-3 bg-[#0F172A] text-white rounded-xl font-medium hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full px-6 py-3 bg-[#6B9080] text-white rounded-xl font-medium hover:bg-[#5A7A6D] transition-all shadow-sm hover:shadow-md font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading && <ButtonLoadingSpinner />}
             {loading ? 'Logging in...' : 'Login'}
@@ -93,7 +93,7 @@ export default function DoctorLoginPage() {
         </form>
 
         <p className="mt-6 text-sm text-center text-[#64748B] font-inter">
-          <Link href="/" className="hover:text-[#0F172A] transition-colors">
+          <Link href="/" className="hover:text-[#2D3748] transition-colors">
             ← Back to home
           </Link>
         </p>

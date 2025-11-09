@@ -197,3 +197,278 @@
 .voice-button-shine:hover::before {
   animation: shimmer 1.5s infinite;
 }
+
+/* Medication Tracker Calendar Styles - Must override react-calendar defaults */
+.react-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: white !important;
+  border: none !important;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  line-height: 1.125em;
+  border-radius: 12px;
+}
+
+/* Override any yellow/blue default colors for today */
+.react-calendar button.react-calendar__tile--now,
+.react-calendar__tile--now button {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #4A7C7E !important;
+  border: 2px solid #4A7C7E !important;
+}
+
+.react-calendar__viewContainer {
+  width: 100% !important;
+}
+
+.react-calendar__month-view {
+  width: 100% !important;
+}
+
+.react-calendar__month-view__weekNumbers {
+  display: none !important;
+}
+
+.react-calendar__month-view__days {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0 !important;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #D4E4DD;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  margin-top: 8px;
+  color: #2D3748;
+  font-weight: 500;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  border: none;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #F5F9F7;
+  border-radius: 8px;
+  outline: none;
+}
+
+.react-calendar__navigation button[disabled] {
+  background-color: transparent;
+  opacity: 0.5;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.75em;
+  color: #64748B;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #F5F9F7;
+  display: flex !important;
+  width: 100% !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  flex: 0 0 calc(100% / 7) !important;
+  width: calc(100% / 7) !important;
+  max-width: calc(100% / 7) !important;
+  min-width: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.react-calendar__month-view__days__day {
+  flex: 0 0 calc(100% / 7) !important;
+  width: calc(100% / 7) !important;
+  max-width: calc(100% / 7) !important;
+  min-width: 0;
+  padding: 0.5em 0.25em;
+  background: none;
+  text-align: center;
+  line-height: 1.2;
+  font-size: 0.85em;
+  color: #2D3748;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  border-radius: 8px;
+  margin: 0 !important;
+  border: none;
+  cursor: pointer;
+  min-height: 58px;
+  max-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible;
+}
+
+.react-calendar__month-view__days__day:enabled:hover,
+.react-calendar__month-view__days__day:enabled:focus {
+  background-color: #E8F3F0;
+  color: #2D3748;
+  outline: none;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #CBD5E1;
+}
+
+.react-calendar__tile--active {
+  background: #4A7C7E !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #3A6C6E !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #4A7C7E !important;
+  font-weight: 600;
+  border: 2px solid #4A7C7E !important;
+  border-color: #4A7C7E !important;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #D4E4DD !important;
+  background-color: #D4E4DD !important;
+  border-color: #4A7C7E !important;
+  color: #3A6C6E !important;
+}
+
+.react-calendar__tile--now abbr {
+  color: #4A7C7E !important;
+}
+
+.react-calendar__month-view__days__day.react-calendar__tile--now {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #4A7C7E !important;
+  border: 2px solid #4A7C7E !important;
+}
+
+.react-calendar__month-view__days__day.react-calendar__tile--now:enabled:hover,
+.react-calendar__month-view__days__day.react-calendar__tile--now:enabled:focus {
+  background: #D4E4DD !important;
+  background-color: #D4E4DD !important;
+  border-color: #4A7C7E !important;
+  color: #3A6C6E !important;
+}
+
+/* Override weekend (Saturday/Sunday) styling - remove red, use sage green */
+.react-calendar__month-view__days__day--weekend {
+  color: #2D3748 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.react-calendar__month-view__days__day--weekend:enabled:hover,
+.react-calendar__month-view__days__day--weekend:enabled:focus {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #2D3748 !important;
+}
+
+.react-calendar__month-view__days__day--weekend.react-calendar__tile--active {
+  background: #4A7C7E !important;
+  background-color: #4A7C7E !important;
+  color: white !important;
+}
+
+.react-calendar__month-view__days__day--weekend.react-calendar__tile--now {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #4A7C7E !important;
+  border: 2px solid #4A7C7E !important;
+}
+
+.react-calendar__tile--weekend {
+  color: #2D3748 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.react-calendar__tile--weekend:enabled:hover,
+.react-calendar__tile--weekend:enabled:focus {
+  background: #E8F3F0 !important;
+  background-color: #E8F3F0 !important;
+  color: #2D3748 !important;
+}
+
+.react-calendar__tile--weekend.react-calendar__tile--active {
+  background: #4A7C7E !important;
+  background-color: #4A7C7E !important;
+  color: white !important;
+}
+
+.react-calendar__tile--hasActive {
+  background: #E8F3F0;
+}
+
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #D4E4DD;
+}
+
+.react-calendar__tile {
+  width: 100% !important;
+  padding: 10px 6px;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+  font-size: 0.9em;
+  border: none;
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
+.react-calendar__tile:disabled {
+  background-color: #f0f0f0;
+  color: #CBD5E1;
+  cursor: not-allowed;
+}
+
+/* Medication end date highlighting - red background */
+.react-calendar__tile.medication-end-date {
+  background: #FEE2E2 !important;
+  background-color: #FEE2E2 !important;
+  border: 2px solid #EF4444 !important;
+  color: #991B1B !important;
+  font-weight: 600;
+}
+
+.react-calendar__tile.medication-end-date:enabled:hover,
+.react-calendar__tile.medication-end-date:enabled:focus {
+  background: #FECACA !important;
+  background-color: #FECACA !important;
+  border-color: #DC2626 !important;
+  color: #7F1D1D !important;
+}
+

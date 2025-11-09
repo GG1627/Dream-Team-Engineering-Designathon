@@ -81,7 +81,7 @@ export default function PatientProfilePage() {
   const checkAuth = async () => {
     const { user: currentUser, error } = await getCurrentUser();
     
-    if (error || !currentUser) {
+    if (error || !currentUser || !currentUser.email) {
       router.push('/patient/login');
       return;
     }
@@ -265,34 +265,34 @@ export default function PatientProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9]">
+    <div className="min-h-screen bg-[#F5F9F7]">
       {/* Navigation */}
-      <nav className="w-full px-8 py-6 border-b border-[#E2E8F0] bg-white">
+      <nav className="w-full px-8 py-6 border-b border-[#D4E4DD] bg-white">
         <div className="container mx-auto max-w-7xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/patient/dashboard">
               <Image
                 src="/Logo.png"
-                alt="Lunari Logo"
+                alt="Sana Logo"
                 width={36}
                 height={36}
                 className="rounded-lg"
               />
             </Link>
-            <Link href="/patient/dashboard" className="text-xl font-semibold text-[#1E293B] font-poppins hover:text-[#0F172A] transition-colors">
-              Lunari
+            <Link href="/patient/dashboard" className="text-xl font-semibold text-[#2D3748] font-poppins hover:text-[#1A202C] transition-colors">
+              Sana
             </Link>
           </div>
           <div className="flex items-center gap-4">
             <Link
               href="/patient/dashboard"
-              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#0F172A] transition-colors font-inter"
+              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#2D3748] transition-colors font-inter"
             >
               Dashboard
             </Link>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#0F172A] transition-colors font-inter"
+              className="px-4 py-2 text-sm text-[#64748B] hover:text-[#2D3748] transition-colors font-inter"
             >
               Logout
             </button>
@@ -303,7 +303,7 @@ export default function PatientProfilePage() {
       {/* Main Content */}
       <main className="container mx-auto max-w-4xl px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-light text-[#0F172A] mb-2 font-poppins">
+          <h1 className="text-4xl font-light text-[#2D3748] mb-2 font-poppins">
             Profile Settings
           </h1>
           <p className="text-lg text-[#64748B] font-inter">
@@ -313,7 +313,7 @@ export default function PatientProfilePage() {
 
         {/* Success Message */}
         {success && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-inter">
+          <div className="mb-6 p-4 bg-[#E8F3F0] border border-[#D4E4DD] rounded-xl text-[#6B9080] text-sm font-inter">
             Profile updated successfully!
           </div>
         )}
@@ -326,12 +326,12 @@ export default function PatientProfilePage() {
         )}
 
         {/* Profile Form */}
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
-          <h2 className="text-xl font-semibold text-[#0F172A] mb-6 font-poppins">Personal Information</h2>
+        <div className="bg-white rounded-xl border border-[#D4E4DD] p-8">
+          <h2 className="text-xl font-semibold text-[#2D3748] mb-6 font-poppins">Personal Information</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email (read-only) */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="email" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Email
               </label>
               <input
@@ -339,14 +339,14 @@ export default function PatientProfilePage() {
                 type="email"
                 value={user?.email || ''}
                 disabled
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl bg-[#F8FAFC] text-[#64748B] font-inter cursor-not-allowed"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl bg-[#F5F9F7] text-[#64748B] font-inter cursor-not-allowed"
               />
               <p className="mt-1 text-xs text-[#64748B] font-inter">Email cannot be changed</p>
             </div>
 
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="name" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -354,7 +354,7 @@ export default function PatientProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="Your Name"
                 required
               />
@@ -362,7 +362,7 @@ export default function PatientProfilePage() {
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="phone" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Phone Number
               </label>
               <input
@@ -370,7 +370,7 @@ export default function PatientProfilePage() {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="(555) 123-4567"
                 maxLength={14}
               />
@@ -378,7 +378,7 @@ export default function PatientProfilePage() {
 
             {/* Age */}
             <div>
-              <label htmlFor="age" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+              <label htmlFor="age" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                 Age
               </label>
               <input
@@ -388,7 +388,7 @@ export default function PatientProfilePage() {
                 max="150"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                 placeholder="25"
               />
             </div>
@@ -398,14 +398,14 @@ export default function PatientProfilePage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="px-6 py-3 bg-[#0F172A] text-white rounded-xl font-medium hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="px-6 py-3 bg-[#4A7C7E] text-white rounded-xl font-medium hover:bg-[#3A6C6E] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {saving && <ButtonLoadingSpinner />}
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
               <Link
                 href="/patient/dashboard"
-                className="px-6 py-3 bg-white text-[#0F172A] rounded-xl font-medium border-2 border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC] transition-all font-inter"
+                className="px-6 py-3 bg-white text-[#2D3748] rounded-xl font-medium border-2 border-[#D4E4DD] hover:border-[#6B9080] hover:bg-[#F5F9F7] transition-all font-inter"
               >
                 Cancel
               </Link>
@@ -414,11 +414,11 @@ export default function PatientProfilePage() {
         </div>
 
         {/* Medical History Section */}
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-8 mt-6">
+        <div className="bg-white rounded-xl border border-[#D4E4DD] p-8 mt-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-semibold text-[#0F172A] font-poppins flex items-center gap-2">
-                <HiOutlineDocumentText className="text-[#0F172A]" />
+              <h2 className="text-xl font-semibold text-[#2D3748] font-poppins flex items-center gap-2">
+                <HiOutlineDocumentText className="text-[#4A7C7E]" />
                 Medical History
               </h2>
               <p className="text-sm text-[#64748B] font-inter mt-1">
@@ -427,14 +427,14 @@ export default function PatientProfilePage() {
             </div>
             <button
               onClick={handleOpenHistoryModal}
-              className="px-4 py-2 bg-[#0F172A] text-white rounded-lg font-medium hover:bg-[#1E293B] transition-colors font-inter text-sm"
+              className="px-4 py-2 bg-[#4A7C7E] text-white rounded-lg font-medium hover:bg-[#3A6C6E] transition-colors font-inter text-sm"
             >
               {medicalHistory ? 'Update Medical History' : 'No medical history detected, Add it'}
             </button>
           </div>
           {medicalHistory && (
-            <div className="mt-4 p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]">
-              <p className="text-sm text-[#64748B] font-inter">
+            <div className="mt-4 p-4 bg-[#E8F3F0] rounded-lg border border-[#D4E4DD]">
+              <p className="text-sm text-[#6B9080] font-inter">
                 {medicalHistory.allergies || medicalHistory.current_medications || medicalHistory.chronic_conditions || 
                  medicalHistory.blood_type || medicalHistory.emergency_contact_name
                   ? '✓ Medical history on file - Click to update'
@@ -448,14 +448,14 @@ export default function PatientProfilePage() {
         {showHistoryModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6 border-b border-[#E2E8F0] sticky top-0 bg-white">
+              <div className="p-6 border-b border-[#D4E4DD] sticky top-0 bg-white">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-semibold text-[#0F172A] font-poppins">
+                  <h2 className="text-2xl font-semibold text-[#2D3748] font-poppins">
                     {medicalHistory ? 'Update Medical History' : 'Add Medical History'}
                   </h2>
                   <button
                     onClick={handleCloseHistoryModal}
-                    className="text-[#64748B] hover:text-[#0F172A] transition-colors text-2xl"
+                    className="text-[#64748B] hover:text-[#2D3748] transition-colors text-2xl"
                   >
                     ×
                   </button>
@@ -471,19 +471,19 @@ export default function PatientProfilePage() {
 
                 {/* Basic Health Info Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Basic Health Information
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="bloodType" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="bloodType" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Blood Type
                       </label>
                       <select
                         id="bloodType"
                         value={bloodType}
                         onChange={(e) => setBloodType(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="A+">A+</option>
@@ -498,7 +498,7 @@ export default function PatientProfilePage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="heightInches" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="heightInches" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Height (inches)
                       </label>
                       <input
@@ -508,12 +508,12 @@ export default function PatientProfilePage() {
                         max="120"
                         value={heightInches}
                         onChange={(e) => setHeightInches(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="70"
                       />
                     </div>
                     <div>
-                      <label htmlFor="weightLbs" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="weightLbs" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Weight (lbs)
                       </label>
                       <input
@@ -523,7 +523,7 @@ export default function PatientProfilePage() {
                         max="1000"
                         value={weightLbs}
                         onChange={(e) => setWeightLbs(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="150"
                       />
                     </div>
@@ -532,31 +532,31 @@ export default function PatientProfilePage() {
 
                 {/* Allergies & Medications Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Allergies & Medications
                   </h3>
                   <div>
-                    <label htmlFor="allergies" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="allergies" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Allergies
                     </label>
                     <textarea
                       id="allergies"
                       value={allergies}
                       onChange={(e) => setAllergies(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List any allergies (e.g., Penicillin, Peanuts, Latex)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="medications" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="medications" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Current Medications
                     </label>
                     <textarea
                       id="medications"
                       value={medications}
                       onChange={(e) => setMedications(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List current medications, dosages, and frequency (e.g., Metformin 500mg twice daily)"
                       rows={4}
                     />
@@ -565,44 +565,44 @@ export default function PatientProfilePage() {
 
                 {/* Medical History Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Medical History
                   </h3>
                   <div>
-                    <label htmlFor="conditions" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="conditions" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Chronic Conditions
                     </label>
                     <textarea
                       id="conditions"
                       value={conditions}
                       onChange={(e) => setConditions(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List chronic conditions (e.g., Diabetes Type 2, Hypertension, Asthma)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="surgeries" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="surgeries" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Past Surgeries
                     </label>
                     <textarea
                       id="surgeries"
                       value={surgeries}
                       onChange={(e) => setSurgeries(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List past surgeries and dates (e.g., Appendectomy - 2015)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="hospitalizations" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="hospitalizations" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Previous Hospitalizations
                     </label>
                     <textarea
                       id="hospitalizations"
                       value={hospitalizations}
                       onChange={(e) => setHospitalizations(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List previous hospitalizations, dates, and reasons"
                       rows={3}
                     />
@@ -611,19 +611,19 @@ export default function PatientProfilePage() {
 
                 {/* Lifestyle Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Lifestyle
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="smokingStatus" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="smokingStatus" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Smoking Status
                       </label>
                       <select
                         id="smokingStatus"
                         value={smokingStatus}
                         onChange={(e) => setSmokingStatus(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="never">Never</option>
@@ -632,14 +632,14 @@ export default function PatientProfilePage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="alcoholUse" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="alcoholUse" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Alcohol Use
                       </label>
                       <select
                         id="alcoholUse"
                         value={alcoholUse}
                         onChange={(e) => setAlcoholUse(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="none">None</option>
@@ -648,14 +648,14 @@ export default function PatientProfilePage() {
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="exerciseFrequency" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="exerciseFrequency" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Exercise Frequency
                       </label>
                       <select
                         id="exerciseFrequency"
                         value={exerciseFrequency}
                         onChange={(e) => setExerciseFrequency(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       >
                         <option value="">Select...</option>
                         <option value="none">None</option>
@@ -668,31 +668,31 @@ export default function PatientProfilePage() {
 
                 {/* Family & Mental Health Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Family & Mental Health
                   </h3>
                   <div>
-                    <label htmlFor="familyHistory" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="familyHistory" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Family History
                     </label>
                     <textarea
                       id="familyHistory"
                       value={familyHistory}
                       onChange={(e) => setFamilyHistory(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Relevant family medical history (e.g., Father: Heart disease, Mother: Diabetes)"
                       rows={3}
                     />
                   </div>
                   <div>
-                    <label htmlFor="mentalHealth" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="mentalHealth" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Mental Health History
                     </label>
                     <textarea
                       id="mentalHealth"
                       value={mentalHealth}
                       onChange={(e) => setMentalHealth(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Mental health conditions, treatments, or relevant history"
                       rows={3}
                     />
@@ -701,18 +701,18 @@ export default function PatientProfilePage() {
 
                 {/* Immunizations Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Immunizations
                   </h3>
                   <div>
-                    <label htmlFor="immunizations" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="immunizations" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Immunization History
                     </label>
                     <textarea
                       id="immunizations"
                       value={immunizations}
                       onChange={(e) => setImmunizations(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="List immunizations and dates (e.g., COVID-19 vaccine - 2021, Flu shot - 2024)"
                       rows={3}
                     />
@@ -721,12 +721,12 @@ export default function PatientProfilePage() {
 
                 {/* Emergency Contact Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Emergency Contact
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="emergencyName" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="emergencyName" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Contact Name
                       </label>
                       <input
@@ -734,12 +734,12 @@ export default function PatientProfilePage() {
                         type="text"
                         value={emergencyName}
                         onChange={(e) => setEmergencyName(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="John Doe"
                       />
                     </div>
                     <div>
-                      <label htmlFor="emergencyPhone" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="emergencyPhone" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Contact Phone
                       </label>
                       <input
@@ -747,13 +747,13 @@ export default function PatientProfilePage() {
                         type="tel"
                         value={emergencyPhone}
                         onChange={(e) => setEmergencyPhone(formatPhoneNumber(e.target.value))}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="(555) 123-4567"
                         maxLength={14}
                       />
                     </div>
                     <div>
-                      <label htmlFor="emergencyRelation" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="emergencyRelation" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Relationship
                       </label>
                       <input
@@ -761,7 +761,7 @@ export default function PatientProfilePage() {
                         type="text"
                         value={emergencyRelation}
                         onChange={(e) => setEmergencyRelation(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="Spouse, Parent, etc."
                       />
                     </div>
@@ -770,12 +770,12 @@ export default function PatientProfilePage() {
 
                 {/* Insurance Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Insurance Information
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="insuranceProvider" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="insuranceProvider" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Insurance Provider
                       </label>
                       <input
@@ -783,12 +783,12 @@ export default function PatientProfilePage() {
                         type="text"
                         value={insuranceProvider}
                         onChange={(e) => setInsuranceProvider(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="Blue Cross Blue Shield"
                       />
                     </div>
                     <div>
-                      <label htmlFor="insurancePolicy" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                      <label htmlFor="insurancePolicy" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                         Policy Number
                       </label>
                       <input
@@ -796,7 +796,7 @@ export default function PatientProfilePage() {
                         type="text"
                         value={insurancePolicy}
                         onChange={(e) => setInsurancePolicy(e.target.value)}
-                        className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                        className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                         placeholder="ABC123456789"
                       />
                     </div>
@@ -805,29 +805,29 @@ export default function PatientProfilePage() {
 
                 {/* Other Notes Section */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-[#0F172A] font-poppins border-b border-[#E2E8F0] pb-2">
+                  <h3 className="text-lg font-semibold text-[#2D3748] font-poppins border-b border-[#D4E4DD] pb-2">
                     Additional Information
                   </h3>
                   <div>
-                    <label htmlFor="otherNotes" className="block text-sm font-medium text-[#0F172A] mb-2 font-inter">
+                    <label htmlFor="otherNotes" className="block text-sm font-medium text-[#2D3748] mb-2 font-inter">
                       Other Notes
                     </label>
                     <textarea
                       id="otherNotes"
                       value={otherNotes}
                       onChange={(e) => setOtherNotes(e.target.value)}
-                      className="w-full px-4 py-3 border border-[#E2E8F0] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter"
+                      className="w-full px-4 py-3 border border-[#D4E4DD] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent font-inter"
                       placeholder="Any other relevant medical information"
                       rows={3}
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-[#E2E8F0]">
+                <div className="flex gap-4 pt-4 border-t border-[#D4E4DD]">
                   <button
                     type="submit"
                     disabled={savingHistory}
-                    className="px-6 py-3 bg-[#0F172A] text-white rounded-xl font-medium hover:bg-[#1E293B] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="px-6 py-3 bg-[#4A7C7E] text-white rounded-xl font-medium hover:bg-[#3A6C6E] transition-all shadow-sm hover:shadow-lg font-inter disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {savingHistory && <ButtonLoadingSpinner />}
                     {savingHistory ? 'Saving...' : 'Save Medical History'}
@@ -835,7 +835,7 @@ export default function PatientProfilePage() {
                   <button
                     type="button"
                     onClick={handleCloseHistoryModal}
-                    className="px-6 py-3 bg-white text-[#0F172A] rounded-xl font-medium border-2 border-[#E2E8F0] hover:border-[#CBD5E1] hover:bg-[#F8FAFC] transition-all font-inter"
+                    className="px-6 py-3 bg-white text-[#2D3748] rounded-xl font-medium border-2 border-[#D4E4DD] hover:border-[#6B9080] hover:bg-[#F5F9F7] transition-all font-inter"
                   >
                     Cancel
                   </button>
