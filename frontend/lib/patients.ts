@@ -276,7 +276,7 @@ export async function getMedicationsByEmail(email: string) {
 /**
  * Add a new medication
  */
-export async function addMedication(patientId: string, medication: { name: string; dosage: string; total_amount: number; start_date: string }) {
+export async function addMedication(patientId: string, medication: { name: string; dosage: string; total_amount: number; start_date: string; created_by?: string | null }) {
   try {
     const { data, error } = await supabase
       .from('medications')
@@ -285,7 +285,8 @@ export async function addMedication(patientId: string, medication: { name: strin
         name: medication.name,
         dosage: medication.dosage,
         total_amount: medication.total_amount,
-        start_date: medication.start_date
+        start_date: medication.start_date,
+        created_by: medication.created_by || null
       })
       .select()
       .single()
@@ -370,7 +371,7 @@ export async function getAllAppointments(limit?: number) {
 }
 
 /**
- * Get upcoming appointments (for doctors - all patients)
+ * Get upcoming appointments (for doctors - all patients, excludes completed)
  */
 export async function getAllUpcomingAppointments(limit?: number) {
   try {
@@ -380,6 +381,7 @@ export async function getAllUpcomingAppointments(limit?: number) {
       .from('appointments')
       .select('*')
       .gte('appointment_date', today)
+      .neq('status', 'completed') // Exclude completed appointments
       .order('appointment_date', { ascending: true })
       .order('appointment_time', { ascending: true })
     
@@ -433,6 +435,58 @@ export async function getAppointmentsByEmail(email: string) {
     }
     
     return await getAppointments(patient.id)
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Update appointment status
+ */
+export async function updateAppointmentStatus(appointmentId: string, status: string) {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .update({ status })
+      .eq('id', appointmentId)
+      .select()
+      .single()
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment, error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get completed appointments for today (for doctors)
+ */
+export async function getCompletedAppointmentsToday(limit?: number) {
+  try {
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    
+    let query = supabase
+      .from('appointments')
+      .select('*')
+      .eq('appointment_date', today)
+      .eq('status', 'completed')
+      .order('appointment_time', { ascending: false })
+    
+    if (limit) {
+      query = query.limit(limit)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment[], error: null }
   } catch (error: any) {
     return { data: null, error }
   }

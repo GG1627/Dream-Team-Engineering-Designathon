@@ -1,89 +1,70 @@
 """
-NVIDIA Nemotron reasoning model service for medical transcription analysis.
-Converts transcription text into SOAP format summaries.
+Groq API reasoning service for medical transcription analysis.
+Converts transcription text into SOAP format summaries using Groq API for fast inference.
 """
 
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from typing import Optional
+import os
 import logging
-import re
+from typing import Optional
+
+# Try to import Groq, fallback message if not available
+try:
+    from langchain_groq import ChatGroq
+    from langchain_core.prompts import ChatPromptTemplate
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("langchain-groq not available. Install with: pip install langchain-groq")
 
 logger = logging.getLogger(__name__)
 
 
 class NemotronReasoningService:
-    """Service for running NVIDIA Nemotron reasoning model."""
+    """Service for running SOAP note generation using Groq API for fast inference."""
     
-    def __init__(self, model_id: str = "microsoft/phi-3-mini-4k-instruct"):
+    def __init__(self, model_id: str = "llama-3.1-8b-instant"):
         """
-        Initialize the Nemotron reasoning model.
+        Initialize the Groq reasoning service.
         
         Args:
-            model_id: Hugging Face model identifier
+            model_id: Groq model identifier (llama-3.1-8b-instant, qwen/qwen2.5-7b-instant, etc.)
         """
+        if not GROQ_AVAILABLE:
+            raise ImportError(
+                "langchain-groq is not installed. Install it with: pip install langchain-groq"
+            )
+        
         self.model_id = model_id
-        self.tokenizer = None
-        self.model = None
-        self.device = None
+        self.llm = None
+        self.device = "groq_api"  # Not a real device, but for compatibility
         self._initialized = False
-    
-    def _detect_device(self):
-        """Detect best available device (CUDA or CPU)."""
-        if torch.cuda.is_available():
-            device = "cuda"
-            gpu_name = torch.cuda.get_device_name(0)
-            cuda_version = torch.version.cuda
-            print(f"✓ CUDA available! Using GPU: {gpu_name} (CUDA {cuda_version})")
-            logger.info(f"CUDA detected: {gpu_name} (CUDA {cuda_version})")
-        else:
-            device = "cpu"
-            print("⚠ CUDA not available, using CPU")
-            logger.warning("CUDA not available, falling back to CPU")
-        return device
+        
+        # API key handling (same pattern as agentic_rag.py)
+        self.HARDCODED_API_KEY = "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"
+        self.api_key = os.getenv("GROQ_API_KEY") or self.HARDCODED_API_KEY
     
     def initialize(self):
-        """Load the model and tokenizer."""
+        """Initialize the Groq LLM."""
         if self._initialized:
             return
         
         try:
-            print(f"Loading Nemotron model: {self.model_id}...")
-            self.device = self._detect_device()
+            logger.info(f"Initializing Groq API with model: {self.model_id}")
+            print(f"Loading Groq API model: {self.model_id}...")
             
-            # Load tokenizer (Nemotron models require trust_remote_code=True)
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.model_id,
-                trust_remote_code=True
+            self.llm = ChatGroq(
+                groq_api_key=self.api_key,
+                model_name=self.model_id,
+                temperature=0.7,
             )
             
-            # Load model with appropriate device map and memory optimizations
-            # Clear cache before loading to ensure maximum available memory
-            if self.device == "cuda":
-                torch.cuda.empty_cache()
-            
-            self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_id,
-                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-                device_map="cuda" if self.device == "cuda" else None,
-                trust_remote_code=True,  # Required for custom models
-                attn_implementation="eager",  # Fix for Phi-3 compatibility
-                low_cpu_mem_usage=True  # Optimize memory usage
-            )
-            
-            if self.device == "cpu":
-                self.model = self.model.to(self.device)
-            
-            self.model.eval()  # Set to evaluation mode
             self._initialized = True
-            print(f"✓ Nemotron model loaded successfully on {self.device}")
+            logger.info(f"✓ Groq API initialized successfully with {self.model_id}")
+            print(f"✓ Groq API model ready: {self.model_id}")
             
-        except torch.cuda.OutOfMemoryError as e:
-            error_msg = "GPU out of memory. Model too large for available VRAM. Try using CPU or a smaller model."
-            logger.error(f"{error_msg}: {e}")
-            raise RuntimeError(error_msg) from e
         except Exception as e:
-            logger.error(f"Failed to load model: {e}")
+            logger.error(f"Failed to initialize Groq API: {e}")
             raise
     
     def summarize_with_nemotron(
@@ -94,12 +75,12 @@ class NemotronReasoningService:
         temperature: float = 0.7
     ) -> str:
         """
-        Generate SOAP format summary from transcription.
+        Generate SOAP format summary from transcription using Groq API.
         
         Args:
             transcript: The transcribed text
             mood: Detected emotion/mood (optional)
-            max_new_tokens: Maximum tokens to generate (default: 400)
+            max_new_tokens: Maximum tokens to generate (default: 400, note: Groq handles this automatically)
             temperature: Sampling temperature (0.0-1.0)
         
         Returns:
@@ -108,80 +89,47 @@ class NemotronReasoningService:
         if not self._initialized:
             self.initialize()
         
-        # Build improved prompt for Phi-3
+        # Build prompt for SOAP note generation
         mood_text = f"Detected emotion: {mood}" if mood else "No emotion detected"
         
-        # Use Phi-3's chat format for better results
-        prompt = f"""<|user|>
-Patient transcription: "{transcript.strip()}"
+        # Create prompt template
+        prompt_template = ChatPromptTemplate.from_messages([
+            ("system", "You are a medical assistant that converts patient transcriptions into concise SOAP (Subjective, Objective, Assessment, Plan) format notes. Be precise, professional, and focus on key medical information."),
+            ("human", """Patient transcription: "{transcript}"
 
 {mood_text}
 
-Generate a concise medical SOAP note summary.<|end|>
-<|assistant|>
-- Subjective:
-"""
+Generate a concise medical SOAP note summary with the following sections:
+- Subjective: Patient's reported symptoms, concerns, and history
+- Objective: Observable findings, vital signs, or clinical observations (if any mentioned)
+- Assessment: Clinical impression, diagnosis, or differential diagnosis
+- Plan: Recommended next steps, treatment plan, or follow-up actions
+
+Format the response clearly with section headers. Keep it concise and clinically relevant.""")
+        ])
         
         try:
-            # Clear CUDA cache before generation to free up memory
-            if self.device == "cuda":
-                torch.cuda.empty_cache()
+            # Update temperature if different from default
+            if temperature != 0.7:
+                self.llm.temperature = temperature
             
-            # Tokenize input
-            inputs = self.tokenizer(
-                prompt, 
-                return_tensors="pt",
-                truncation=True,
-                max_length=512
-            ).to(self.device)
+            # Create chain and invoke
+            chain = prompt_template | self.llm
+            response = chain.invoke({
+                "transcript": transcript.strip(),
+                "mood_text": mood_text
+            })
             
-            # Generate response
-            with torch.no_grad():  # Disable gradient computation for inference
-                outputs = self.model.generate(
-                    **inputs,
-                    max_new_tokens=max_new_tokens,
-                    temperature=temperature,
-                    do_sample=True if temperature > 0 else False,
-                    pad_token_id=self.tokenizer.eos_token_id,
-                    eos_token_id=self.tokenizer.eos_token_id,
-                    use_cache=False,  # Fix for Phi-3 compatibility issue
-                    max_length=inputs['input_ids'].shape[1] + max_new_tokens  # Limit total length
-                )
-            
-            # Decode output
-            generated_text = self.tokenizer.decode(
-                outputs[0], 
-                skip_special_tokens=True
-            )
-            
-            # Clear memory immediately after generation
-            if self.device == "cuda":
-                del inputs, outputs
-                torch.cuda.empty_cache()
-            
-            # Better extraction - find where SOAP content actually starts
-            if "<|assistant|>" in generated_text:
-                # Extract everything after assistant tag
-                generated_text = generated_text.split("<|assistant|>", 1)[-1].strip()
-            elif prompt in generated_text:
-                # Fallback: remove the prompt
-                generated_text = generated_text.split(prompt, 1)[-1].strip()
-            elif "- Subjective:" in generated_text:
-                # Find where actual SOAP content starts
-                start_idx = generated_text.find("- Subjective:")
-                generated_text = generated_text[start_idx:].strip()
+            # Extract content from response
+            soap_summary = response.content if hasattr(response, 'content') else str(response)
             
             # Clean up the output
-            generated_text = self._clean_soap_output(generated_text)
+            soap_summary = self._clean_soap_output(soap_summary)
             
-            return generated_text
+            return soap_summary
             
-        except torch.cuda.OutOfMemoryError as e:
-            error_msg = "GPU out of memory. Try reducing max_new_tokens or using CPU."
-            logger.error(f"{error_msg}: {e}")
-            raise RuntimeError(error_msg) from e
         except Exception as e:
-            logger.error(f"Error during generation: {e}")
+            logger.error(f"Error during Groq API generation: {e}")
             raise
     
     def _clean_soap_output(self, text: str) -> str:
@@ -208,7 +156,9 @@ Generate a concise medical SOAP note summary.<|end|>
             "Detected emotion:",
             "Summarize the case",
             "Patient said:",
-            "The patient said:"
+            "The patient said:",
+            "Here's a SOAP note",
+            "Based on the transcription"
         ]
         
         for line in lines:
@@ -222,15 +172,26 @@ Generate a concise medical SOAP note summary.<|end|>
                 stop_here = True
                 break
             
+            # Remove markdown formatting if present
+            line_stripped = line_stripped.replace("**", "").replace("__", "").replace("*", "")
+            
             # Check if this is a section header
             if line_stripped.startswith('- ') and ':' in line_stripped:
                 section = line_stripped.split(':')[0].strip()
                 if section not in seen_sections:
                     seen_sections.add(section)
-                    cleaned_lines.append(line)
+                    cleaned_lines.append(line_stripped)
                 # Skip duplicate headers
+            elif line_stripped.startswith('**') and '**' in line_stripped:
+                # Handle markdown headers like **Subjective:**
+                section = line_stripped.replace('**', '').replace('*', '').strip()
+                if ':' in section:
+                    section_name = section.split(':')[0].strip()
+                    if section_name not in seen_sections:
+                        seen_sections.add(section_name)
+                        cleaned_lines.append(f"- {section}")
             elif line_stripped:
-                cleaned_lines.append(line)
+                cleaned_lines.append(line_stripped)
             elif cleaned_lines:  # Keep single blank lines between sections
                 cleaned_lines.append('')
         
@@ -238,6 +199,7 @@ Generate a concise medical SOAP note summary.<|end|>
         cleaned_text = '\n'.join(cleaned_lines)
         
         # Remove multiple consecutive blank lines
+        import re
         cleaned_text = re.sub(r'\n{3,}', '\n\n', cleaned_text)
         
         # Final cleanup: remove any remaining junk text that might have slipped through
@@ -250,7 +212,7 @@ Generate a concise medical SOAP note summary.<|end|>
         return cleaned_text.strip()
     
     def is_initialized(self) -> bool:
-        """Check if model is initialized."""
+        """Check if service is initialized."""
         return self._initialized
 
 
@@ -259,10 +221,8 @@ _nemotron_service: Optional[NemotronReasoningService] = None
 
 
 def get_nemotron_service() -> NemotronReasoningService:
-    """Get or create the global Nemotron service instance."""
+    """Get or create the global reasoning service instance."""
     global _nemotron_service
     if _nemotron_service is None:
         _nemotron_service = NemotronReasoningService()
     return _nemotron_service
-
-

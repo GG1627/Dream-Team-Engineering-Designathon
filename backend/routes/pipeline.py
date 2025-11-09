@@ -39,7 +39,8 @@ async def audio_to_soap(
     Process audio file through the pipeline: transcription -> SOAP notes.
     """
 
-    # Clear CUDA cache before processing to free up memory
+    # Clear CUDA cache before processing (for Whisper transcription)
+    # Reasoning service uses Groq API, so no local GPU needed for that
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
         import gc
@@ -67,7 +68,7 @@ async def audio_to_soap(
             temperature=temperature
         )
 
-        # Clear CUDA cache after processing
+        # Clear CUDA cache after processing (Whisper cleanup)
         if torch.cuda.is_available():
             import gc
             gc.collect()
@@ -97,7 +98,7 @@ async def audio_to_soap(
                 os.unlink(temp_file_path)
             except:
                 pass
-        # Final cache clear
+        # Final cache clear (Whisper cleanup)
         if torch.cuda.is_available():
             import gc
             gc.collect()

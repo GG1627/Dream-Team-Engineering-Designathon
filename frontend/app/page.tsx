@@ -10,7 +10,7 @@ export default function Home() {
       {/* Subtle LiquidEther Background */}
       <div className="fixed inset-0 z-0 opacity-15">
         <LiquidEther
-          colors={['#E8F3F0', '#D4E4DD', '#B8D4CC', '#E0EAE5']}
+          colors={['#000000', '#000000', '#000000', '#000000']}
           resolution={0.5}
           mouseForce={15}
           cursorSize={100}

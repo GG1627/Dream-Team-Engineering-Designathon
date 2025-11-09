@@ -60,7 +60,8 @@ class PipelineService:
         if not transcript.strip():
             raise ValueError("No speech detected in the audio file.")
 
-        # Clear CUDA cache after transcription to free memory for reasoning
+        # Clear CUDA cache after transcription (Whisper uses local GPU/CPU)
+        # Note: Reasoning service now uses Groq API, so no local GPU needed for that
         if torch.cuda.is_available():
             import gc
             gc.collect()
@@ -68,39 +69,14 @@ class PipelineService:
             gc.collect()  # Double collect for better cleanup
             logger.info("Cleared CUDA cache after transcription")
 
-        # Step 2: Generate SOAP notes
-        logger.info("Generating SOAP notes...")
-        try:
-            soap_summary = self.reasoning_service.summarize_with_nemotron(
-                transcript=transcript,
-                mood=mood,
-                max_new_tokens=max_new_tokens,
-                temperature=temperature
-            )
-        except torch.cuda.OutOfMemoryError as e:
-            # Clear cache aggressively and try once more
-            if torch.cuda.is_available():
-                import gc
-                gc.collect()
-                torch.cuda.empty_cache()
-                gc.collect()
-                torch.cuda.empty_cache()
-                logger.warning("CUDA OOM detected, clearing cache aggressively and retrying...")
-                soap_summary = self.reasoning_service.summarize_with_nemotron(
-                    transcript=transcript,
-                    mood=mood,
-                    max_new_tokens=max_new_tokens,
-                    temperature=temperature
-                )
-            else:
-                raise
-
-        # Clear cache after reasoning
-        if torch.cuda.is_available():
-            import gc
-            gc.collect()
-            torch.cuda.empty_cache()
-            gc.collect()
+        # Step 2: Generate SOAP notes using Groq API (fast, no local GPU needed)
+        logger.info("Generating SOAP notes with Groq API...")
+        soap_summary = self.reasoning_service.summarize_with_nemotron(
+            transcript=transcript,
+            mood=mood,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature
+        )
 
         return {
             "transcript": transcript,

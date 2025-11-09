@@ -1,5 +1,6 @@
 """
-API routes for Nemotron reasoning model.
+API routes for Groq API reasoning service.
+Fast SOAP note generation using Groq API for instant responses.
 """
 
 from fastapi import APIRouter, HTTPException
