@@ -41,7 +41,7 @@ class NemotronReasoningService:
         self._initialized = False
         
         # API key handling (same pattern as agentic_rag.py)
-        self.HARDCODED_API_KEY = os.getenv("GROQ_API_KEY")
+        self.HARDCODED_API_KEY = "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"
         self.api_key = os.getenv("GROQ_API_KEY") or self.HARDCODED_API_KEY
     
     def initialize(self):
