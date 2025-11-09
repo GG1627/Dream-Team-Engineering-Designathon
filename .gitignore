@@ -31,5 +31,6 @@ frontend/out/
 
 # Environment & misc
 .env
+.env.local
 .DS_Store
 Thumbs.db

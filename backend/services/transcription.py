@@ -160,6 +160,11 @@ class TranscriptionService:
             "segments": segment_list
         }
         
+        # Clear CUDA cache after transcription to free memory
+        if self.device == "cuda":
+            import torch
+            torch.cuda.empty_cache()
+        
         return text.strip(), info_dict
     
     def transcribe_chunk(

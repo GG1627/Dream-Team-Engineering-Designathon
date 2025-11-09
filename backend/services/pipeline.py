@@ -5,6 +5,7 @@ Takes audio input → transcribes → generates SOAP notes.
 
 from typing import Optional, Dict
 import logging
+import torch
 from backend.services.transcription import get_transcription_service
 from backend.services.reasoning import get_nemotron_service
 
@@ -59,14 +60,37 @@ class PipelineService:
         if not transcript.strip():
             raise ValueError("No speech detected in the audio file.")
 
+        # Clear CUDA cache after transcription to free memory for reasoning
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            logger.info("Cleared CUDA cache after transcription")
+
         # Step 2: Generate SOAP notes
         logger.info("Generating SOAP notes...")
-        soap_summary = self.reasoning_service.summarize_with_nemotron(
-            transcript=transcript,
-            mood=mood,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature
-        )
+        try:
+            soap_summary = self.reasoning_service.summarize_with_nemotron(
+                transcript=transcript,
+                mood=mood,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature
+            )
+        except torch.cuda.OutOfMemoryError as e:
+            # Clear cache and try once more
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                logger.warning("CUDA OOM detected, clearing cache and retrying...")
+                soap_summary = self.reasoning_service.summarize_with_nemotron(
+                    transcript=transcript,
+                    mood=mood,
+                    max_new_tokens=max_new_tokens,
+                    temperature=temperature
+                )
+            else:
+                raise
+
+        # Clear cache after reasoning
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
         return {
             "transcript": transcript,

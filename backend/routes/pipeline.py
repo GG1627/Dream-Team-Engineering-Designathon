@@ -78,6 +78,46 @@ async def audio_to_soap(
             except:
                 pass
 
+@router.post("/transcribe-chunk")
+async def transcribe_chunk(
+    file: UploadFile = File(...),
+    language: str = Form("en")
+):
+    """
+    Transcribe a small audio chunk for real-time streaming.
+    Returns just the transcript (no SOAP generation for speed).
+    """
+    temp_file_path = None
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_file:
+            content = await file.read()
+            temp_file.write(content)
+            temp_file_path = temp_file.name
+        
+        pipeline = get_pipeline_service()
+        pipeline.initialize()
+        
+        # Just transcribe, don't generate SOAP (faster)
+        transcript, info = pipeline.transcription_service.transcribe_file(
+            temp_file_path,
+            language=language
+        )
+        
+        return {
+            "transcript": transcript,
+            "language": info.get("language"),
+            "confidence": info.get("language_probability", 0)
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error transcribing chunk: {str(e)}")
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            try:
+                os.unlink(temp_file_path)
+            except:
+                pass
+
 @router.post("/transcript-to-soap", response_model=PipelineResponse)
 async def transcript_to_soap(request: TranscriptRequest):
     try:

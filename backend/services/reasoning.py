@@ -32,10 +32,14 @@ class NemotronReasoningService:
         """Detect best available device (CUDA or CPU)."""
         if torch.cuda.is_available():
             device = "cuda"
-            print(f"Using GPU: {torch.cuda.get_device_name(0)}")
+            gpu_name = torch.cuda.get_device_name(0)
+            cuda_version = torch.version.cuda
+            print(f"✓ CUDA available! Using GPU: {gpu_name} (CUDA {cuda_version})")
+            logger.info(f"CUDA detected: {gpu_name} (CUDA {cuda_version})")
         else:
             device = "cpu"
-            print("Using CPU")
+            print("⚠ CUDA not available, using CPU")
+            logger.warning("CUDA not available, falling back to CPU")
         return device
     
     def initialize(self):
@@ -53,13 +57,18 @@ class NemotronReasoningService:
                 trust_remote_code=True
             )
             
-            # Load model with appropriate device map
+            # Load model with appropriate device map and memory optimizations
+            # Clear cache before loading to ensure maximum available memory
+            if self.device == "cuda":
+                torch.cuda.empty_cache()
+            
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.model_id,
                 torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
                 device_map="cuda" if self.device == "cuda" else None,
                 trust_remote_code=True,  # Required for custom models
-                attn_implementation="eager"  # Fix for Phi-3 compatibility
+                attn_implementation="eager",  # Fix for Phi-3 compatibility
+                low_cpu_mem_usage=True  # Optimize memory usage
             )
             
             if self.device == "cpu":
@@ -114,6 +123,10 @@ Generate a concise medical SOAP note summary.<|end|>
 """
         
         try:
+            # Clear CUDA cache before generation to free up memory
+            if self.device == "cuda":
+                torch.cuda.empty_cache()
+            
             # Tokenize input
             inputs = self.tokenizer(
                 prompt, 
@@ -131,7 +144,8 @@ Generate a concise medical SOAP note summary.<|end|>
                     do_sample=True if temperature > 0 else False,
                     pad_token_id=self.tokenizer.eos_token_id,
                     eos_token_id=self.tokenizer.eos_token_id,
-                    use_cache=False  # Fix for Phi-3 compatibility issue
+                    use_cache=False,  # Fix for Phi-3 compatibility issue
+                    max_length=inputs['input_ids'].shape[1] + max_new_tokens  # Limit total length
                 )
             
             # Decode output
@@ -139,6 +153,11 @@ Generate a concise medical SOAP note summary.<|end|>
                 outputs[0], 
                 skip_special_tokens=True
             )
+            
+            # Clear memory immediately after generation
+            if self.device == "cuda":
+                del inputs, outputs
+                torch.cuda.empty_cache()
             
             # Better extraction - find where SOAP content actually starts
             if "<|assistant|>" in generated_text:
