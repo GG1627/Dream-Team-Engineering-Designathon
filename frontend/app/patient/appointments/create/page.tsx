@@ -191,6 +191,21 @@ export default function CreateAppointmentPage() {
 
   useEffect(() => {
     checkAuth();
+    
+    // Clear CUDA cache when visiting the page to free up memory
+    const clearCache = async () => {
+      try {
+        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+        await fetch(`${BACKEND_URL}/pipeline/clear-cache`, {
+          method: 'POST',
+        });
+      } catch (error) {
+        // Silently fail - cache clearing is best effort
+        console.log('Cache clear request failed (non-critical):', error);
+      }
+    };
+    
+    clearCache();
   }, []);
 
   const checkAuth = async () => {
@@ -427,6 +442,16 @@ export default function CreateAppointmentPage() {
       setReason(data.transcript);
       setLiveTranscript(data.transcript); // Update live transcript with final version
       
+      // Clear CUDA cache after successful processing to free memory
+      try {
+        await fetch(`${BACKEND_URL}/pipeline/clear-cache`, {
+          method: 'POST',
+        });
+      } catch (cacheError) {
+        // Silently fail - cache clearing is best effort
+        console.log('Cache clear after processing failed (non-critical):', cacheError);
+      }
+      
     } catch (error: any) {
       console.error('Error processing audio:', error);
       const errorMessage = error.message || 'Failed to process audio. Please try again.';
@@ -555,6 +580,17 @@ export default function CreateAppointmentPage() {
 
       if (insertError) {
         throw insertError;
+      }
+
+      // Clear CUDA cache after successful submission to free memory
+      try {
+        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+        await fetch(`${BACKEND_URL}/pipeline/clear-cache`, {
+          method: 'POST',
+        });
+      } catch (error) {
+        // Silently fail - cache clearing is best effort
+        console.log('Cache clear after submit failed (non-critical):', error);
       }
 
       router.push('/patient/dashboard');

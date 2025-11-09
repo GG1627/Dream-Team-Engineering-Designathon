@@ -62,7 +62,10 @@ class PipelineService:
 
         # Clear CUDA cache after transcription to free memory for reasoning
         if torch.cuda.is_available():
+            import gc
+            gc.collect()
             torch.cuda.empty_cache()
+            gc.collect()  # Double collect for better cleanup
             logger.info("Cleared CUDA cache after transcription")
 
         # Step 2: Generate SOAP notes
@@ -75,10 +78,14 @@ class PipelineService:
                 temperature=temperature
             )
         except torch.cuda.OutOfMemoryError as e:
-            # Clear cache and try once more
+            # Clear cache aggressively and try once more
             if torch.cuda.is_available():
+                import gc
+                gc.collect()
                 torch.cuda.empty_cache()
-                logger.warning("CUDA OOM detected, clearing cache and retrying...")
+                gc.collect()
+                torch.cuda.empty_cache()
+                logger.warning("CUDA OOM detected, clearing cache aggressively and retrying...")
                 soap_summary = self.reasoning_service.summarize_with_nemotron(
                     transcript=transcript,
                     mood=mood,
@@ -90,7 +97,10 @@ class PipelineService:
 
         # Clear cache after reasoning
         if torch.cuda.is_available():
+            import gc
+            gc.collect()
             torch.cuda.empty_cache()
+            gc.collect()
 
         return {
             "transcript": transcript,

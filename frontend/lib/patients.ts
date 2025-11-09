@@ -46,6 +46,22 @@ export interface MedicalHistory {
   updated_at?: string
 }
 
+export interface Appointment {
+  id?: string
+  patient_id?: string
+  doctor_id?: string | null
+  appointment_date: string
+  appointment_time: string
+  location?: string | null
+  reason?: string | null
+  transcript?: string | null
+  soap_notes?: string | null
+  notes?: string | null
+  status?: string
+  created_at?: string
+  updated_at?: string
+}
+
 /**
  * Get patient data from patients table by email
  */
@@ -175,6 +191,161 @@ export async function upsertMedicalHistoryByEmail(email: string, history: Partia
     }
     
     return await upsertMedicalHistory(patient.id, history)
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get all appointments for a patient by patient_id
+ */
+export async function getAppointments(patientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('patient_id', patientId)
+      .order('appointment_date', { ascending: true })
+      .order('appointment_time', { ascending: true })
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment[], error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get all appointments (for doctors - no patient filter)
+ */
+export async function getAllAppointments(limit?: number) {
+  try {
+    let query = supabase
+      .from('appointments')
+      .select('*')
+      .order('appointment_date', { ascending: true })
+      .order('appointment_time', { ascending: true })
+    
+    if (limit) {
+      query = query.limit(limit)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment[], error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get upcoming appointments (for doctors - all patients)
+ */
+export async function getAllUpcomingAppointments(limit?: number) {
+  try {
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    
+    let query = supabase
+      .from('appointments')
+      .select('*')
+      .gte('appointment_date', today)
+      .order('appointment_date', { ascending: true })
+      .order('appointment_time', { ascending: true })
+    
+    if (limit) {
+      query = query.limit(limit)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment[], error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get patient data by patient_id
+ */
+export async function getPatientDataById(patientId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('patients')
+      .select('*')
+      .eq('id', patientId)
+      .single()
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as PatientData, error: null }
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get all appointments for a patient by email (looks up patient_id first)
+ */
+export async function getAppointmentsByEmail(email: string) {
+  try {
+    // First get patient data to get patient_id
+    const { data: patient, error: patientError } = await getPatientData(email)
+    
+    if (patientError || !patient || !patient.id) {
+      return { data: null, error: patientError || { message: 'Patient not found' } }
+    }
+    
+    return await getAppointments(patient.id)
+  } catch (error: any) {
+    return { data: null, error }
+  }
+}
+
+/**
+ * Get upcoming appointments (appointments with date >= today)
+ */
+export async function getUpcomingAppointmentsByEmail(email: string, limit?: number) {
+  try {
+    const { data: patient, error: patientError } = await getPatientData(email)
+    
+    if (patientError || !patient || !patient.id) {
+      return { data: null, error: patientError || { message: 'Patient not found' } }
+    }
+
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    
+    let query = supabase
+      .from('appointments')
+      .select('*')
+      .eq('patient_id', patient.id)
+      .gte('appointment_date', today)
+      .order('appointment_date', { ascending: true })
+      .order('appointment_time', { ascending: true })
+    
+    if (limit) {
+      query = query.limit(limit)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      return { data: null, error }
+    }
+    
+    return { data: data as Appointment[], error: null }
   } catch (error: any) {
     return { data: null, error }
   }

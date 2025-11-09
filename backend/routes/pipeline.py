@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from typing import Optional
 import tempfile
 import os
+import torch
 from backend.services.pipeline import get_pipeline_service
 
 router = APIRouter(prefix="/pipeline", tags=["pipeline"])
@@ -38,6 +39,13 @@ async def audio_to_soap(
     Process audio file through the pipeline: transcription -> SOAP notes.
     """
 
+    # Clear CUDA cache before processing to free up memory
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        import gc
+        gc.collect()
+        torch.cuda.empty_cache()  # Double clear for good measure
+
     # create a temporary file to save uploaded audio
     temp_file_path = None
     try:
@@ -59,6 +67,12 @@ async def audio_to_soap(
             temperature=temperature
         )
 
+        # Clear CUDA cache after processing
+        if torch.cuda.is_available():
+            import gc
+            gc.collect()
+            torch.cuda.empty_cache()
+
         return PipelineResponse(
             transcript=result["transcript"],
             soap_summary=result["soap_summary"],
@@ -67,16 +81,27 @@ async def audio_to_soap(
         )
 
     except ValueError as e:
+        # Clear cache on error too
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        # Clear cache on error too
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         raise HTTPException(status_code=500, detail=f"Error processing audio: {str(e)}")
     finally:
-        # clean up temp file
+        # clean up temp file and clear cache
         if temp_file_path and os.path.exists(temp_file_path):
             try:
                 os.unlink(temp_file_path)
             except:
                 pass
+        # Final cache clear
+        if torch.cuda.is_available():
+            import gc
+            gc.collect()
+            torch.cuda.empty_cache()
 
 @router.post("/transcribe-chunk")
 async def transcribe_chunk(
@@ -142,6 +167,39 @@ async def transcript_to_soap(request: TranscriptRequest):
             detail=f"Error generating SOAP summary: {str(e)}"
         )
 
+
+@router.post("/clear-cache")
+async def clear_cache():
+    """Clear CUDA cache to free up GPU memory."""
+    try:
+        if torch.cuda.is_available():
+            import gc
+            gc.collect()
+            torch.cuda.empty_cache()
+            # Double clear for good measure
+            gc.collect()
+            torch.cuda.empty_cache()
+            
+            # Get memory stats
+            allocated = torch.cuda.memory_allocated() / 1024**3  # GB
+            reserved = torch.cuda.memory_reserved() / 1024**3  # GB
+            
+            return {
+                "status": "success",
+                "message": "CUDA cache cleared",
+                "memory_allocated_gb": round(allocated, 2),
+                "memory_reserved_gb": round(reserved, 2)
+            }
+        else:
+            return {
+                "status": "success",
+                "message": "CUDA not available, no cache to clear"
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e)
+        }
 
 @router.get("/health")
 async def health_check():

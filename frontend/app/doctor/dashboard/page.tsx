@@ -5,11 +5,22 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCurrentUser, logout } from '@/lib/auth';
+import { getAllUpcomingAppointments, getPatientDataById, getMedicalHistory, Appointment, PatientData, MedicalHistory } from '@/lib/patients';
 import { FullPageLoading } from '@/app/components/LoadingSpinner';
+import { IoCalendarOutline, IoClose } from 'react-icons/io5';
+import { BsClock } from 'react-icons/bs';
+import { HiOutlineDocumentText } from 'react-icons/hi2';
+
+interface AppointmentWithPatient extends Appointment {
+  patient?: PatientData;
+  medicalHistory?: MedicalHistory;
+}
 
 export default function DoctorDashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [appointments, setAppointments] = useState<AppointmentWithPatient[]>([]);
+  const [selectedAppointment, setSelectedAppointment] = useState<AppointmentWithPatient | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,12 +36,76 @@ export default function DoctorDashboard() {
     }
     
     setUser(currentUser);
+    await loadAppointments();
     setLoading(false);
+  };
+
+  const loadAppointments = async () => {
+    try {
+      const { data: appointmentsData, error } = await getAllUpcomingAppointments(50);
+      if (error || !appointmentsData) {
+        console.error('Error loading appointments:', error);
+        return;
+      }
+
+      // Fetch patient data for each appointment
+      const appointmentsWithPatients = await Promise.all(
+        appointmentsData.map(async (appointment) => {
+          let patient: PatientData | undefined;
+          let medicalHistory: MedicalHistory | undefined;
+
+          if (appointment.patient_id) {
+            const { data: patientData } = await getPatientDataById(appointment.patient_id);
+            patient = patientData || undefined;
+
+            if (patient?.id) {
+              const { data: historyData } = await getMedicalHistory(patient.id);
+              medicalHistory = historyData || undefined;
+            }
+          }
+
+          return {
+            ...appointment,
+            patient,
+            medicalHistory,
+          } as AppointmentWithPatient;
+        })
+      );
+
+      setAppointments(appointmentsWithPatients);
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+    }
   };
 
   const handleLogout = async () => {
     await logout();
     router.push('/');
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+  };
+
+  const formatTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  const handleAppointmentClick = (appointment: AppointmentWithPatient) => {
+    setSelectedAppointment(appointment);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedAppointment(null);
   };
 
   if (loading) {
@@ -78,41 +153,253 @@ export default function DoctorDashboard() {
           </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <div className="p-6 bg-white rounded-xl border border-[#E2E8F0]">
-            <div className="text-2xl font-semibold text-[#0F172A] mb-1 font-poppins">0</div>
-            <div className="text-sm text-[#64748B] font-inter">Total Patients</div>
-          </div>
-          <div className="p-6 bg-white rounded-xl border border-[#E2E8F0]">
-            <div className="text-2xl font-semibold text-[#0F172A] mb-1 font-poppins">0</div>
-            <div className="text-sm text-[#64748B] font-inter">Records Today</div>
-          </div>
-          <div className="p-6 bg-white rounded-xl border border-[#E2E8F0]">
-            <div className="text-2xl font-semibold text-[#0F172A] mb-1 font-poppins">0</div>
-            <div className="text-sm text-[#64748B] font-inter">Pending Reviews</div>
-          </div>
-        </div>
-
-        {/* Patients Section */}
+        {/* Upcoming Appointments Section */}
         <div className="bg-white rounded-xl border border-[#E2E8F0] p-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-[#0F172A] font-poppins">
-              Patient Records
-            </h2>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Search patients..."
-                className="px-4 py-2 border border-[#E2E8F0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F172A] focus:border-transparent font-inter text-sm"
-              />
+            <div>
+              <h2 className="text-2xl font-semibold text-[#0F172A] font-poppins flex items-center gap-2">
+                <IoCalendarOutline className="text-[#0F172A]" />
+                Upcoming Appointments
+              </h2>
+              <p className="text-sm text-[#64748B] font-inter mt-1">
+                {appointments.length} appointment{appointments.length !== 1 ? 's' : ''} scheduled
+              </p>
             </div>
           </div>
-          <div className="text-center py-12 text-[#64748B] font-inter">
-            <p className="mb-2">No patient records yet</p>
-            <p className="text-sm">Patient records will appear here once they create intake sessions</p>
-          </div>
+
+          {appointments.length === 0 ? (
+            <div className="text-center py-12 text-[#64748B] font-inter">
+              <IoCalendarOutline className="text-5xl mx-auto mb-4 text-[#CBD5E1]" />
+              <p className="mb-2 font-medium">No upcoming appointments</p>
+              <p className="text-sm">Appointments will appear here once patients schedule them</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {appointments.map((appointment) => (
+                <div
+                  key={appointment.id}
+                  onClick={() => handleAppointmentClick(appointment)}
+                  className="group relative bg-gradient-to-br from-white to-[#FAFAF9] border border-[#E2E8F0] rounded-xl p-5 hover:border-[#0F172A] hover:shadow-lg transition-all duration-200 cursor-pointer"
+                >
+                  {/* Status Badge */}
+                  {appointment.status && (
+                    <div className="absolute top-4 right-4">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold font-inter ${
+                        appointment.status === 'scheduled' 
+                          ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                          : appointment.status === 'completed'
+                          ? 'bg-green-50 text-green-700 border border-green-200'
+                          : 'bg-gray-50 text-gray-700 border border-gray-200'
+                      }`}>
+                        {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Patient Name */}
+                  <div className="mb-4 pr-20">
+                    <h3 className="font-semibold text-[#0F172A] font-poppins text-lg mb-1">
+                      {appointment.patient?.name || 'Unknown Patient'}
+                    </h3>
+                    {appointment.patient?.email && (
+                      <p className="text-sm text-[#64748B] font-inter">
+                        {appointment.patient.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Date & Time */}
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <IoCalendarOutline className="text-[#0F172A] text-base" />
+                      <p className="font-medium text-[#0F172A] font-inter">
+                        {formatDate(appointment.appointment_date)}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 text-[#64748B]">
+                      <BsClock className="text-sm" />
+                      <p className="font-medium font-inter text-sm">
+                        {formatTime(appointment.appointment_time)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* SOAP Notes Indicator */}
+                  {appointment.soap_notes && (
+                    <div className="mt-4 pt-4 border-t border-[#E2E8F0]">
+                      <div className="flex items-center gap-2">
+                        <HiOutlineDocumentText className="text-green-600 text-base" />
+                        <span className="text-xs font-medium text-green-700 font-inter">
+                          SOAP Notes Available
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Patient Detail Modal */}
+        {selectedAppointment && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+            <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto my-8">
+              {/* Modal Header */}
+              <div className="sticky top-0 bg-white border-b border-[#E2E8F0] p-6 z-10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-semibold text-[#0F172A] font-poppins">
+                      {selectedAppointment.patient?.name || 'Unknown Patient'}
+                    </h2>
+                    <p className="text-sm text-[#64748B] font-inter mt-1">
+                      {selectedAppointment.patient?.email || 'No email'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleCloseModal}
+                    className="text-[#64748B] hover:text-[#0F172A] transition-colors text-2xl p-2 hover:bg-[#F8FAFC] rounded-lg"
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-6 space-y-6">
+                {/* Appointment Details */}
+                <div className="bg-[#F8FAFC] rounded-xl p-5 border border-[#E2E8F0]">
+                  <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins">Appointment Details</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-[#64748B] font-inter mb-1">Date</p>
+                      <p className="font-medium text-[#0F172A] font-inter">{formatDate(selectedAppointment.appointment_date)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-[#64748B] font-inter mb-1">Time</p>
+                      <p className="font-medium text-[#0F172A] font-inter">{formatTime(selectedAppointment.appointment_time)}</p>
+                    </div>
+                    {selectedAppointment.status && (
+                      <div>
+                        <p className="text-sm text-[#64748B] font-inter mb-1">Status</p>
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold font-inter ${
+                          selectedAppointment.status === 'scheduled' 
+                            ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                            : selectedAppointment.status === 'completed'
+                            ? 'bg-green-50 text-green-700 border border-green-200'
+                            : 'bg-gray-50 text-gray-700 border border-gray-200'
+                        }`}>
+                          {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Patient Information */}
+                {selectedAppointment.patient && (
+                  <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                    <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins">Patient Information</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-[#64748B] font-inter mb-1">Name</p>
+                        <p className="font-medium text-[#0F172A] font-inter">{selectedAppointment.patient.name}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-[#64748B] font-inter mb-1">Email</p>
+                        <p className="font-medium text-[#0F172A] font-inter">{selectedAppointment.patient.email}</p>
+                      </div>
+                      {selectedAppointment.patient.phone && (
+                        <div>
+                          <p className="text-sm text-[#64748B] font-inter mb-1">Phone</p>
+                          <p className="font-medium text-[#0F172A] font-inter">{selectedAppointment.patient.phone}</p>
+                        </div>
+                      )}
+                      {selectedAppointment.patient.age && (
+                        <div>
+                          <p className="text-sm text-[#64748B] font-inter mb-1">Age</p>
+                          <p className="font-medium text-[#0F172A] font-inter">{selectedAppointment.patient.age}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Medical History Summary */}
+                {selectedAppointment.medicalHistory && (
+                  <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                    <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins">Medical History</h3>
+                    <div className="space-y-3">
+                      {selectedAppointment.medicalHistory.allergies && (
+                        <div>
+                          <p className="text-sm font-medium text-[#64748B] font-inter mb-1">Allergies</p>
+                          <p className="text-[#0F172A] font-inter">{selectedAppointment.medicalHistory!.allergies}</p>
+                        </div>
+                      )}
+                      {selectedAppointment.medicalHistory.current_medications && (
+                        <div>
+                          <p className="text-sm font-medium text-[#64748B] font-inter mb-1">Current Medications</p>
+                          <p className="text-[#0F172A] font-inter">{selectedAppointment.medicalHistory!.current_medications}</p>
+                        </div>
+                      )}
+                      {selectedAppointment.medicalHistory.chronic_conditions && (
+                        <div>
+                          <p className="text-sm font-medium text-[#64748B] font-inter mb-1">Chronic Conditions</p>
+                          <p className="text-[#0F172A] font-inter">{selectedAppointment.medicalHistory!.chronic_conditions}</p>
+                        </div>
+                      )}
+                      {selectedAppointment.medicalHistory.blood_type && (
+                        <div>
+                          <p className="text-sm font-medium text-[#64748B] font-inter mb-1">Blood Type</p>
+                          <p className="text-[#0F172A] font-inter">{selectedAppointment.medicalHistory!.blood_type}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* SOAP Notes */}
+                {selectedAppointment.soap_notes && (
+                  <div className="bg-[#F0F9FF] rounded-xl p-5 border border-blue-200">
+                    <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins flex items-center gap-2">
+                      <HiOutlineDocumentText className="text-blue-600" />
+                      SOAP Notes
+                    </h3>
+                    <div className="bg-white rounded-lg p-4 border border-blue-100">
+                      <pre className="whitespace-pre-wrap font-inter text-sm text-[#0F172A] leading-relaxed">
+                        {selectedAppointment.soap_notes}
+                      </pre>
+                    </div>
+                  </div>
+                )}
+
+                {/* Transcript */}
+                {selectedAppointment.transcript && (
+                  <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                    <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins">Transcript</h3>
+                    <div className="bg-[#F8FAFC] rounded-lg p-4 border border-[#E2E8F0]">
+                      <p className="text-sm text-[#0F172A] font-inter leading-relaxed italic">
+                        "{selectedAppointment.transcript}"
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Notes */}
+                {selectedAppointment.notes && (
+                  <div className="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                    <h3 className="text-lg font-semibold text-[#0F172A] mb-4 font-poppins">Additional Notes</h3>
+                    <div className="bg-[#F8FAFC] rounded-lg p-4 border border-[#E2E8F0]">
+                      <p className="text-sm text-[#0F172A] font-inter leading-relaxed whitespace-pre-wrap">
+                        {selectedAppointment.notes}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
